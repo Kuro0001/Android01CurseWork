@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_account.xml" value="0.13020833333333334" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_category.xml" value="0.1296875" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_client.xml" value="0.12604166666666666" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_client_detail.xml" value="0.24048913043478262" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_dashboard.xml" value="0.1793478260869565" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_diraction.xml" value="0.1793478260869565" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_direction.xml" value="0.1793478260869565" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_employee.xml" value="0.245018115942029" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_employee_detail.xml" value="0.245018115942029" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_home.xml" value="0.152" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_hotel.xml" value="0.24728260869565216" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_hotel_detail.xml" value="0.2" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_kinds.xml" value="0.1296875" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_tour.xml" value="0.13020833333333334" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_tour_operator.xml" value="0.13020833333333334" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/fragment_tour_operator_detail.xml" value="0.13020833333333334" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_client.xml" value="0.176" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_direction.xml" value="0.4" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_employee.xml" value="0.245018115942029" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_hotel.xml" value="0.24728260869565216" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_kind.xml" value="0.1296875" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_tour.xml" value="0.13020833333333334" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/item_tour_operator.xml" value="0.13020833333333334" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/layout/iten_category.xml" value="0.152" />
+        <entry key="..\:/for_android_progects/_curse_work/program01/app/src/main/res/menu/bottom_nav_menu.xml" value="0.264" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

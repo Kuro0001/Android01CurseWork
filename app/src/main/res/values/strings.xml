@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">CurseWork</string>
+
+    <string name="title_home">Home</string>
+    <string name="fragment_home_header_list">Tables</string>
+    <string name="fragment_home_button_directions">Directions</string>
+    <string name="fragment_home_button_hotels">Hotels</string>
+    <string name="fragment_home_button_kinds">Kinds</string>
+    <string name="fragment_home_button_categories">Categories</string>
+    <string name="fragment_home_button_tour_operators">Tour Operators</string>
+    <string name="fragment_home_button_clients">Clients</string>
+    <string name="fragment_home_button_employees">Employees</string>
+    <string name="fragment_home_button_tours">Tours</string>
+    <string name="fragment_home_button_vouchers">Vouchers</string>
+
+    <string name="title_new_voucher">New voucher</string>
+    <string name="title_account">Account</string>
+
+
+    <string name="title_direction">Direction</string>
+    <string name="list_direction_column_name">Name: </string>
+
+
+    <string name="title_hotel">Hotel</string>
+    <string name="list_hotel_column_name">Name: </string>
+    <string name="list_hotel_column_address">Address: </string>
+    <string name="list_hotel_column_direction">Direction: </string>
+
+    <string name="title_kind">Kind</string>
+    <string name="list_kind_column_name">Name: </string>
+
+    <string name="title_category">Category</string>
+    <string name="list_category_column_name">Name: </string>
+    <string name="list_category_column_added_value">Added value: </string>
+    <string name="list_category_column_discount">Discount: </string>
+
+    <string name="title_tour_operator">TourOperator</string>
+    <string name="list_tour_operator_column_name">Name: </string>
+    <string name="list_tour_operator_column_phone">Phone: </string>
+    <string name="list_tour_operator_column_unique_number">U.number: </string>
+    <string name="list_tour_operator_column_mail">Mail: </string>
+
+    <string name="title_employee">Employee</string>
+    <string name="list_employee_column_name">Name: </string>w
+    <string name="list_employee_column_surname">Surname: </string>
+    <string name="list_employee_column_patronymic">Patronymic: </string>
+    <string name="list_employee_column_mail">Mail: </string>
+    <string name="list_employee_column_login">Login: </string>
+    <string name="list_employee_column_password">Password: </string>
+
+    <string name="title_client">Client</string>
+    <string name="list_client_column_name">Name: </string>w
+    <string name="list_client_column_surname">Surname: </string>
+    <string name="list_client_column_patronymic">Patronymic: </string>
+    <string name="list_client_column_mail">Mail: </string>
+    <string name="list_client_column_phone">Phone: </string>
+    <string name="list_client_column_passport">Passport: </string>
+    <string name="list_client_column_sex">Sex: </string>
+    <string name="list_client_column_birthdate">Birthdate: </string>
+
+    <string name="title_tour">Tour</string>
+    <string name="list_tour_column_name">Name: </string>w
+    <string name="list_tour_column_date_start">Start date: </string>
+    <string name="list_tour_column_days_count">Days count: </string>
+    <string name="list_tour_column_offers_all">Offers count: </string>
+    <string name="list_tour_column_price">Price: </string>
+    <string name="list_tour_column_tour_operator">Tour operator: </string>
+    <string name="list_tour_column_kind">Kind: </string>
+    <string name="list_tour_column_category">Category: </string>
+    <string name="list_tour_column_hotel">Hotel: </string>
+    <string name="list_tour_column_direction">Direction: </string>
+
+
+
+    <string name="button_add">Add new</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_search">Search</string>
+    <string name="button_log_in">Log in</string>
+    <string name="button_logout">Log out</string>
+    <string name="button_goto_account">Go to account</string>
+
+    <string name="check_box_male">Male</string>
+    <string name="check_box_female">Female</string>
+
+    <string name="action_result_OK">Action completed successfully</string>
+    <string name="action_result_input_not_correct">Input data not correct</string>
+    <string name="action_add_result_OK">Row added successfully</string>
+    <string name="action_edit_result_OK">Row edited successfully</string>
+    <string name="action_delete_result_OK">Row deleted successfully</string>
+
+    <string name="action_result_NOT_OK">Action completed, but not successfully</string>
+
+    <string name="action_search_OK">Found %1$d rows</string>
+    <string name="action_search_null">No records matching search parameters</string>
+    <string name="action_result_ERROR">Action cant be completed</string>
+
+    <string name="action_authorisation_login_not_exist">Login dose not exist</string>
+    <string name="action_authorisation_wrong_password">Wrong password</string>
+    <string name="action_authorisation_log_in_OK">Authorisation completed</string>
+    <string name="action_authorisation_log_out_OK">Log out completed</string>
+
+    <string name="db_row_dont_exist">Row dose not exist in data base</string>
+    <string name="db_row_cant_find">Cant find row in data base</string>
+    <string name="db_row_already_exist">Row already exist in data base</string>
+    <string name="db_row_in_use">Row is referenced in another table</string>
+
+    <string name="db_empty">Data base empty on this table</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

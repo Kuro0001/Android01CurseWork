@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            tools:text="@string/title_home_header_list" />
+
+        <Button
+            android:id="@+id/btnDirections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_directions" />
+
+        <Button
+            android:id="@+id/btnHotels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_hotels" />
+
+        <Button
+            android:id="@+id/btnKinds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_kinds" />
+
+        <Button
+            android:id="@+id/btnCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_categories" />
+
+        <Button
+            android:id="@+id/btnTourOperators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_tour_operators" />
+
+        <Button
+            android:id="@+id/btnEmployees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_employees" />
+
+        <Button
+            android:id="@+id/btnClients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_clients" />
+
+        <Button
+            android:id="@+id/btnTours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_tours" />
+
+        <Button
+            android:id="@+id/btnVouchers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_home_button_vouchers" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
