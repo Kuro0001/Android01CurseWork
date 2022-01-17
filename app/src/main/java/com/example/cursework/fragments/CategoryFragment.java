@@ -164,17 +164,25 @@ public class CategoryFragment extends Fragment {
      * @param position
      * @param id
      */
-    public void onClickList(AdapterView<?> parent, View view, int position, long id){
-        categoryID = (int)id;
-        if (rowIsExist(DBHelper.TABLE_NAME_CATEGORIES,DBHelper.KEY_CATEGORIES_ID,categoryID)) {
-//            binding.edEnterName.setText(String.valueOf(directionId));
-            Cursor item = (Cursor) simpleCursorAdapter.getItem(position);
-            binding.etName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
-            binding.etAddedValue.setText(item.getString(item.getColumnIndexOrThrow(from[1])));
-            binding.etDiscount.setText(item.getString(item.getColumnIndexOrThrow(from[2])));
-            setEnabled(true);
-        }else {
-            setEnabled(false);
+    public void onClickList(AdapterView<?> parent, View view, int position, long id) {
+        categoryID = (int) id;
+        if (getArguments().getString("action") == "choose") {
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            String key = "select_category";
+            Bundle bundle = new Bundle();
+            bundle.putInt(key, categoryID);
+            requireActivity().getSupportFragmentManager().setFragmentResult(key, bundle);
+            host.popBackStack();
+        } else {
+            if (rowIsExist(DBHelper.TABLE_NAME_CATEGORIES, DBHelper.KEY_CATEGORIES_ID, categoryID)) {
+                Cursor item = (Cursor) simpleCursorAdapter.getItem(position);
+                binding.etName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                binding.etAddedValue.setText(item.getString(item.getColumnIndexOrThrow(from[1])));
+                binding.etDiscount.setText(item.getString(item.getColumnIndexOrThrow(from[2])));
+                setEnabled(true);
+            } else {
+                setEnabled(false);
+            }
         }
     }
 

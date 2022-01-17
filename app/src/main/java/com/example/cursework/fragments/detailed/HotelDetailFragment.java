@@ -24,6 +24,10 @@ import com.example.cursework.R;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentHotelDetailBinding;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HotelDetailFragment#newInstance} factory method to
@@ -111,12 +115,20 @@ public class HotelDetailFragment extends Fragment {
         binding.spnDirection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedDirectionId = directionIds[(int)id];
+                selectedDirectionId = (int)id+1;
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        if (selectedHotelId > 0) {
+            for (int i=0;i<directionIds.length;i++){
+                if (directionIds[i] == selectedDirectionId){
+                    binding.spnDirection.setSelection(i);
+                    break;
+                }
+            }
+        }
 
         return root;
 //        return inflater.inflate(R.layout.fragment_hotel_detail, container, false);
@@ -158,6 +170,9 @@ public class HotelDetailFragment extends Fragment {
                 directionIds[i] = cursor.getInt(indID);
                 int indName = cursor.getColumnIndex(DBHelper.KEY_DIRECTIONS_NAME);
                 directionNames[i] = cursor.getString(indName);
+//                if (selectedDirectionId > 0 && selectedDirectionId == directionIds[i]){
+//                    binding.spnDirection.setSelection(i);
+//                }
                 i++;
             } while (cursor.moveToNext() == true);
         }

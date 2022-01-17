@@ -45,18 +45,18 @@ public class HotelFragment extends Fragment {
     Cursor cursor;
     int hotelId;
     int directionId;
-    int[] hotelds;
+    int[] hotelIDs = {0};
 
-    public static String[] names = new String[] {
+    public static String[] names = new String[]{
             DBHelper.KEY_HOTELS_ID,
-            "hotelNAME",
+            "hotelName",
             "hotelADDRESS",
             "hotelDirectionID",
             "DirectionID",
             "DirectionNAME"
     };
 
-    public static String[] from = new String[] {
+    public static String[] from = new String[]{
             names[1],
             names[2],
             names[5]
@@ -114,6 +114,7 @@ public class HotelFragment extends Fragment {
         return root;
 //        return inflater.inflate(R.layout.fragment_hotel, container, false);
     }
+
     @Override
     public void onDestroyView() {
         Log.d(tagDB, "Вызов метода onDestroyView фрагмента HotelFragment");
@@ -121,146 +122,124 @@ public class HotelFragment extends Fragment {
         binding = null;
 //        cursor.close();
     }
+
     /**
      * Метод считывания данных из БД
      */
-    public void readDB(){
+    public void readDB() {
         Log.d(tagDB, "Вызов метода readDB фрагмента HotelFragment");
         database = dbHelper.getReadableDatabase();
-//        String query = "SELECT * FROM " + DBHelper.TABLE_NAME_HOTELS + ", " + DBHelper.TABLE_NAME_DIRECTIONS +
-//                " WHERE " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION +
-//                " = " + DBHelper.TABLE_NAME_DIRECTIONS + "." +  DBHelper.KEY_DIRECTIONS_ID +
-//                " GROUP BY " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID;
 
-        String query = "SELECT " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID  +
-                ", " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_NAME + " as " + names[1] +
-                ", " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ADDRESS + " as " + names[2] +
-                ", " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION + " as " + names[3] +
-                ", " + DBHelper.TABLE_NAME_DIRECTIONS + "." + DBHelper.KEY_DIRECTIONS_ID + " as " + names[4] +
-                ", " + DBHelper.TABLE_NAME_DIRECTIONS + "." + DBHelper.KEY_DIRECTIONS_NAME + " as " + names[5] +
-                " FROM " + DBHelper.TABLE_NAME_HOTELS  +
-                " INNER JOIN " + DBHelper.TABLE_NAME_DIRECTIONS +
-                " on " + DBHelper.TABLE_NAME_DIRECTIONS + "." + DBHelper.KEY_DIRECTIONS_ID  +
-                " = " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION;
+        String query = "SELECT hotel." + DBHelper.KEY_HOTELS_ID +
+                ", hotel." + DBHelper.KEY_HOTELS_NAME + " as " + names[1] +
+                ", hotel." + DBHelper.KEY_HOTELS_ADDRESS + " as " + names[2] +
+                ", direction." + DBHelper.KEY_DIRECTIONS_ID + " as " + names[3] +
+                ", direction." + DBHelper.KEY_DIRECTIONS_NAME + " as " + names[5] +
+                " FROM " + DBHelper.TABLE_NAME_HOTELS + " as hotel " +
+                " INNER JOIN " + DBHelper.TABLE_NAME_DIRECTIONS + " as direction" +
+                " on hotel." + DBHelper.KEY_HOTELS_ID_DIRECTION +
+                " = direction." + DBHelper.KEY_DIRECTIONS_ID;
 
-        cursor = database.rawQuery(query,null);
-        simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_hotel , cursor, from, to, 0);
+        cursor = database.rawQuery(query, null);
+        simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_hotel, cursor, from, to, 0);
         binding.lvHotels.setAdapter(simpleCursorAdapter);
         binding.lvHotels.setOnItemClickListener(this::onClickList);
 
 
-        if(cursor.moveToFirst() == true){
-            hotelds = new int[cursor.getCount()];
-            int i =0;
+        if (cursor.moveToFirst() == true) {
+            hotelIDs = new int[cursor.getCount()];
+            int i = 0;
             //Получение индексов
             do {
                 int indID = cursor.getColumnIndex(DBHelper.KEY_HOTELS_ID);
-                hotelds[i] = cursor.getInt(indID);
+                hotelIDs[i] = cursor.getInt(indID);
                 i++;
                 simpleCursorAdapter.changeCursor(cursor);
                 binding.lvHotels.setOnItemClickListener(this::onClickList);
-
-                Log.d(tagDB, "==========");
-                indID = cursor.getColumnIndex(names[0]);
-                Log.d(tagDB, "отель айди " + cursor.getInt(indID));
-                indID = cursor.getColumnIndex(names[1]);
-                Log.d(tagDB, "отель имя " + cursor.getString(indID));
-                indID = cursor.getColumnIndex(names[2]);
-                Log.d(tagDB, "отель aдрес " + cursor.getString(indID));
-                indID = cursor.getColumnIndex(names[3]);
-                Log.d(tagDB, "отель направление айди " + cursor.getInt(indID));
-                indID = cursor.getColumnIndex(names[5]);
-                Log.d(tagDB, "отель направление имя " + cursor.getString(indID));
                 cursor.moveToNext();
             } while (cursor.isAfterLast() != true);
         }
 //        cursor.close();
     }
+
     /**
      * Метод взаимдействия пользователя со списком данных (событие нажатия на элемент списка)
      * перенаправление на детальную информацию записи
+     *
      * @param parent
      * @param view
      * @param position
      * @param id
      */
-    public void onClickList(AdapterView<?> parent, View view, int position, long id){
-//        Cursor item = (Cursor) simpleCursorAdapter.getItem(position);
-//        int indID = item.getColumnIndex(DBHelper.KEY_HOTELS_ID);
-//        hotelId = item.getInt(indID);
-
+    public void onClickList(AdapterView<?> parent, View view, int position, long id) {
         cursor.moveToPosition(position);
         int indID = cursor.getColumnIndex(names[0]);
         hotelId = cursor.getInt(indID);
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", hotelId);
-        NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_hotel_detail,bundle);
+        if (getArguments().getString("action") == "choose") {
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            String key = "select_hotel";
+            Bundle bundle = new Bundle();
+            bundle.putInt(key, hotelId);
+            requireActivity().getSupportFragmentManager().setFragmentResult(key, bundle);
+            host.popBackStack();
+        }
+        else {
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", hotelId);
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            host.navigate(R.id.fragment_hotel_detail, bundle);
+        }
     }
 
     /**
      * Метод для создания новой записи
+     *
      * @param view
      */
-    public void onAdd(View view){
+    public void onAdd(View view) {
         Bundle bundle = new Bundle();
         bundle.putInt("id", -1);
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_hotel_detail,bundle);
+        host.navigate(R.id.fragment_hotel_detail, bundle);
     }
 
     /**
      * Метод для поиска отелей по заданному Направлению
      * @param view
      */
-    public void onSearch(View view){
+    public void onSearch(View view) {
         String directionName = binding.etSearchDirectionName.getText().toString();
         database = dbHelper.getReadableDatabase();
-        Cursor searchCursor = database.query(DBHelper.TABLE_NAME_DIRECTIONS,
-                null,
-                DBHelper.KEY_DIRECTIONS_NAME + " LIKE ?",
-                new String[] {
-                        directionName + "%"},
-                null,
-                null,
-                null);
-        if(searchCursor.moveToFirst() == true) {
-            int indId = searchCursor.getColumnIndex(DBHelper.KEY_DIRECTIONS_ID);
-            directionId = searchCursor.getInt(indId);
-
-            String query = "SELECT * FROM " + DBHelper.TABLE_NAME_HOTELS + ", " + DBHelper.TABLE_NAME_DIRECTIONS +
-                    " WHERE " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION +
-                    " = " + DBHelper.TABLE_NAME_DIRECTIONS + "." +  DBHelper.KEY_DIRECTIONS_ID +
-                    " AND " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION +
-                    " = " + directionId +
-                    " GROUP BY " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_NAME +
-                    ", " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ADDRESS +
-                    ", " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION +
-                    ", " + DBHelper.TABLE_NAME_DIRECTIONS + "." + DBHelper.KEY_DIRECTIONS_NAME;
-
-            cursor = database.rawQuery(query,null);
-
-            if(cursor.moveToFirst() == true) {
-                simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_hotel , cursor, from, to, 0);
-                binding.lvHotels.setAdapter(simpleCursorAdapter);
-                binding.lvHotels.setOnItemClickListener(this::onClickList);
+        String query = "SELECT hotel." + DBHelper.KEY_HOTELS_ID +
+                ", hotel." + DBHelper.KEY_HOTELS_NAME + " as " + names[1] +
+                ", hotel." + DBHelper.KEY_HOTELS_ADDRESS + " as " + names[2] +
+                ", direction." + DBHelper.KEY_DIRECTIONS_ID + " as " + names[3] +
+                ", direction." + DBHelper.KEY_DIRECTIONS_NAME + " as " + names[5] +
+                " FROM " + DBHelper.TABLE_NAME_HOTELS + " as hotel " +
+                " INNER JOIN " + DBHelper.TABLE_NAME_DIRECTIONS + " as direction" +
+                " on hotel." + DBHelper.KEY_HOTELS_ID_DIRECTION +
+                " = direction." + DBHelper.KEY_DIRECTIONS_ID +
+                " WHERE direction." + DBHelper.KEY_DIRECTIONS_NAME +
+                " LIKE '%" + directionName + "%'";
+        cursor = database.rawQuery(query, null);
 
 
-                if(cursor.moveToFirst() == true){
-                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_OK,cursor.getCount()),Toast.LENGTH_LONG);
-                    //Получение индексов
-                    do {
-                        simpleCursorAdapter.changeCursor(cursor);
-                        binding.lvHotels.setOnItemClickListener(this::onClickList);
-                    } while (cursor.moveToNext() == true);
-                }
-            }else {
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_null),Toast.LENGTH_LONG);
-            Log.d(tagDB, getResources().getString(R.string.action_search_null));
-        }
-        }else {
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_null),Toast.LENGTH_LONG);
+        if (cursor.moveToFirst() == true) {
+            simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_hotel, cursor, from, to, 0);
+            binding.lvHotels.setAdapter(simpleCursorAdapter);
+            binding.lvHotels.setOnItemClickListener(this::onClickList);
+
+
+            if (cursor.moveToFirst() == true) {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_OK, cursor.getCount()), Toast.LENGTH_LONG);
+                //Получение индексов
+                do {
+                    simpleCursorAdapter.changeCursor(cursor);
+                    binding.lvHotels.setOnItemClickListener(this::onClickList);
+                } while (cursor.moveToNext() == true);
+            }
+        } else {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_null), Toast.LENGTH_LONG);
             Log.d(tagDB, getResources().getString(R.string.action_search_null));
         }
         toast.show();

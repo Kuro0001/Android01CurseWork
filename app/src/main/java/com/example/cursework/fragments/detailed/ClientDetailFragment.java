@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
@@ -18,6 +20,10 @@ import com.example.cursework.R;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentClientDetailBinding;
 import com.example.cursework.databinding.FragmentTourOperatorDetailBinding;
+
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +49,15 @@ public class ClientDetailFragment extends Fragment {
     Cursor cursor;
     int selectedID;
     boolean sex = false;
+    String[] days = new String[31];
+    String[] months = new String[12];
+    Calendar calendar = Calendar.getInstance();
+    int currentYear = calendar.get(Calendar.YEAR);
+    String[] years = new String[currentYear - 1900];
+    int day = 0;
+    int month = 0;
+    int year = 0;
+
 
     public ClientDetailFragment() {
         // Required empty public constructor
@@ -91,19 +106,82 @@ public class ClientDetailFragment extends Fragment {
         dbHelper = new DBHelper(getContext());
 
         selectedID = getArguments().getInt("id");
-        if (selectedID >= 0) {
+        if (selectedID > 0) {
             setEnabled(true);
             readDb();
         } else {
             setEnabled(false);
         }
+        setSpinners();
         return root;
 //        return inflater.inflate(R.layout.fragment_client_detail, container, false);
+    }
+    /**
+     * Метод заполнения спиннеров даты для их далнейшей эксплуатации
+     */
+    public void setSpinners(){
+        Log.d(tagDB, "Вызов метода setSpinners фрагмента ClientDetailFragment");
+        for (int i=1;i<10;i++){
+            days[i-1] = 0 + String.valueOf(i);
+        }
+        for (int i=10;i<32;i++){
+            days[i-1] = String.valueOf(i);
+        }
+        for (int i=1;i<10;i++){
+            months[i-1] = 0 + String.valueOf(i);
+        }
+        for (int i=10;i<13;i++){
+            months[i-1] = String.valueOf(i);
+        }
+        for (int i=0;i<currentYear-1900;i++) {
+            years[i] = String.valueOf(currentYear - i);
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, days);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spBirthDateDay.setAdapter(adapter);
+        binding.spBirthDateDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                day = position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, months);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spBirthDateMonth.setAdapter(adapter1);
+        binding.spBirthDateMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                month = position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, years);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spBirthDateYear.setAdapter(adapter2);
+        binding.spBirthDateYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                year = position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        if(getArguments().getInt("id") > 0){
+            binding.spBirthDateDay.setSelection(day);
+            binding.spBirthDateMonth.setSelection(month);
+            binding.spBirthDateYear.setSelection(currentYear-year);
+        }
     }
 
     /**
      * Метод предоставления и закрытия доступа к компонентам изменения БД
-     *
      * @param status
      */
     public void setEnabled(boolean status){
@@ -116,7 +194,6 @@ public class ClientDetailFragment extends Fragment {
 
     /**
      * Метод установки значения для компонентов Check box
-     *
      * @param sex
      */
     public void setSex(boolean sex) {
@@ -168,6 +245,7 @@ public class ClientDetailFragment extends Fragment {
             binding.etPatronymic.setText(cursor.getString(indPatronymic));
             int indPassport = cursor.getColumnIndex(DBHelper.KEY_CLIENTS_PASSPORT);
             binding.etPassport.setText(cursor.getString(indPassport));
+
             int indSex = cursor.getColumnIndex(DBHelper.KEY_CLIENTS_SEX);
             String sex = cursor.getString(indSex);
             if (sex.equals("м")) {
@@ -175,8 +253,14 @@ public class ClientDetailFragment extends Fragment {
             } else {
                 setSex(false);
             }
+
             int indDate = cursor.getColumnIndex(DBHelper.KEY_CLIENTS_BIRTHDATE);
-            binding.etBirthDate.setText(cursor.getString(indDate));
+            long birthDate = cursor.getLong(indDate);
+            day = (int)(birthDate % 100)-1;
+            month = (int)(birthDate /100 % 100)-1;
+            year = (int)(birthDate /10000);
+            setSpinners();
+
             int indPhone = cursor.getColumnIndex(DBHelper.KEY_CLIENTS_PHONE);
             binding.etPhone.setText(cursor.getString(indPhone));
             int indMale = cursor.getColumnIndex(DBHelper.KEY_CLIENTS_MAIL);
@@ -187,7 +271,6 @@ public class ClientDetailFragment extends Fragment {
 
     /**
      * Проверка наличия выбранной записи данных в БД
-     *
      * @param id
      * @return
      */
@@ -223,7 +306,6 @@ public class ClientDetailFragment extends Fragment {
 
     /**
      * Метод добавления записи в БД
-     *
      * @param view
      */
     public void onAdd(View view) {
@@ -242,7 +324,8 @@ public class ClientDetailFragment extends Fragment {
                 s = "ж";
             }
             contentValues.put(DBHelper.KEY_CLIENTS_SEX, s);
-            contentValues.put(DBHelper.KEY_CLIENTS_BIRTHDATE, binding.etBirthDate.getText().toString());
+            String date = years[year] + months[month] + days[day];
+            contentValues.put(DBHelper.KEY_CLIENTS_BIRTHDATE, date);
             contentValues.put(DBHelper.KEY_CLIENTS_PHONE, binding.etPhone.getText().toString());
             contentValues.put(DBHelper.KEY_CLIENTS_MAIL, binding.etMail.getText().toString());
 
@@ -265,7 +348,6 @@ public class ClientDetailFragment extends Fragment {
 
     /**
      * Метод изменения выбранной записи данных в БД
-     *
      * @param view
      */
     public void onEdit(View view) {
@@ -285,7 +367,8 @@ public class ClientDetailFragment extends Fragment {
                     s = "ж";
                 }
                 contentValues.put(DBHelper.KEY_CLIENTS_SEX, s);
-                contentValues.put(DBHelper.KEY_CLIENTS_BIRTHDATE, binding.etBirthDate.getText().toString());
+                String date = years[year] + months[month] + days[day];
+                contentValues.put(DBHelper.KEY_CLIENTS_BIRTHDATE, date);
                 contentValues.put(DBHelper.KEY_CLIENTS_PHONE, binding.etPhone.getText().toString());
                 contentValues.put(DBHelper.KEY_CLIENTS_MAIL, binding.etMail.getText().toString());
                 String where = DBHelper.KEY_CLIENTS_ID + "=" + selectedID;
@@ -315,7 +398,6 @@ public class ClientDetailFragment extends Fragment {
 
     /**
      * Метод удаления выбранной записи из БД
-     *
      * @param view
      */
     public void onDelete(View view) {

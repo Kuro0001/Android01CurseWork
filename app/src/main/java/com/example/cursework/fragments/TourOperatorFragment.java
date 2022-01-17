@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.cursework.R;
 import com.example.cursework.dataBase.DBHelper;
-import com.example.cursework.databinding.FragmentDirectionBinding;
 import com.example.cursework.databinding.FragmentTourOperatorBinding;
 
 /**
@@ -40,7 +39,7 @@ public class TourOperatorFragment extends Fragment {
     SQLiteDatabase database;
     SimpleCursorAdapter simpleCursorAdapter;
     Cursor cursor;
-    int tourOperatorId;
+    int selectedID;
 
     public static String[] from = new String[] {
             DBHelper.KEY_TOUR_OPERATORS_NAME,
@@ -152,10 +151,20 @@ public class TourOperatorFragment extends Fragment {
      * @param id
      */
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", (int)id);
-        NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_tour_operator_detail,bundle);
+        if (getArguments().getString("action") == "choose") {
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            String key = "select_tour_operator";
+            Bundle bundle = new Bundle();
+            bundle.putInt(key, (int)id);
+            requireActivity().getSupportFragmentManager().setFragmentResult(key, bundle);
+            host.popBackStack();
+        }
+        else {
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", (int) id);
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            host.navigate(R.id.fragment_tour_operator_detail, bundle);
+        }
     }
     /**
      * Метод для создания новой записи
@@ -186,7 +195,7 @@ public class TourOperatorFragment extends Fragment {
                 null);
         if(cursor.moveToFirst() == true) {
             int indId = cursor.getColumnIndex(DBHelper.KEY_TOUR_OPERATORS_ID);
-            tourOperatorId = cursor.getInt(indId);
+            selectedID = cursor.getInt(indId);
             {
                 simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_tour_operator , cursor, from, to, 0);
                 binding.lvTourOperators.setAdapter(simpleCursorAdapter);

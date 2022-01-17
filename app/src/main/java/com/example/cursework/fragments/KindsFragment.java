@@ -160,13 +160,22 @@ public class KindsFragment extends Fragment {
      */
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
         kindId = (int)id;
-        if (rowIsExist(DBHelper.TABLE_NAME_KINDS,DBHelper.KEY_KINDS_ID,kindId)) {
-//            binding.edEnterName.setText(String.valueOf(directionId));
-            Cursor item = (Cursor) simpleCursorAdapter.getItem(position);
-            binding.etName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
-            setEnabled(true);
+        if (getArguments().getString("action") == "choose"){
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            String key = "select_kind";
+            Bundle bundle = new Bundle();
+            bundle.putInt(key, kindId);
+            requireActivity().getSupportFragmentManager().setFragmentResult(key, bundle);
+            host.popBackStack();
         }else {
-            setEnabled(false);
+            if (rowIsExist(DBHelper.TABLE_NAME_KINDS, DBHelper.KEY_KINDS_ID, kindId)) {
+//            binding.edEnterName.setText(String.valueOf(directionId));
+                Cursor item = (Cursor) simpleCursorAdapter.getItem(position);
+                binding.etName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                setEnabled(true);
+            } else {
+                setEnabled(false);
+            }
         }
     }
     public boolean rowIsExist(String table, String columnName, int id){

@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
         binding.btnTourOperators.setOnClickListener(this::onTourOperator);
         binding.btnEmployees.setOnClickListener(this::onEmployee);
         binding.btnClients.setOnClickListener(this::onClient);
+        binding.btnTours.setOnClickListener(this::onTour);
         return root;
     }
 
@@ -69,5 +70,9 @@ public class HomeFragment extends Fragment {
     public void onClient(View view){
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         host.navigate(R.id.fragment_client);
+    }
+    public void onTour(View view){
+        NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+        host.navigate(R.id.fragment_tour);
     }
 }

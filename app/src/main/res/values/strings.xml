@@ -2,6 +2,7 @@
     <string name="app_name">CurseWork</string>
 
     <string name="title_home">Home</string>
+    <string name="title_home_header_list">Tables</string>
     <string name="fragment_home_header_list">Tables</string>
     <string name="fragment_home_button_directions">Directions</string>
     <string name="fragment_home_button_hotels">Hotels</string>
@@ -59,7 +60,7 @@
     <string name="list_client_column_birthdate">Birthdate: </string>
 
     <string name="title_tour">Tour</string>
-    <string name="list_tour_column_name">Name: </string>w
+    <string name="list_tour_column_name">Name: </string>
     <string name="list_tour_column_date_start">Start date: </string>
     <string name="list_tour_column_days_count">Days count: </string>
     <string name="list_tour_column_offers_all">Offers count: </string>
@@ -69,8 +70,10 @@
     <string name="list_tour_column_category">Category: </string>
     <string name="list_tour_column_hotel">Hotel: </string>
     <string name="list_tour_column_direction">Direction: </string>
+    <string name="list_tour_column_vouchers_done">Vouchers: </string>
 
 
+    <string name="button_on_select_out_table_row">Select</string>
 
     <string name="button_add">Add new</string>
     <string name="button_edit">Edit</string>

@@ -50,21 +50,13 @@ public class ClientFragment extends Fragment {
             DBHelper.KEY_CATEGORIES_NAME,
             DBHelper.KEY_CLIENTS_SURNAME,
             DBHelper.KEY_CLIENTS_PATRONYMIC,
-            DBHelper.KEY_CLIENTS_PASSPORT,
-            DBHelper.KEY_CLIENTS_SEX,
-            DBHelper.KEY_CLIENTS_BIRTHDATE,
-            DBHelper.KEY_CLIENTS_PHONE,
-            DBHelper.KEY_CLIENTS_MAIL
+            DBHelper.KEY_CLIENTS_PASSPORT
     };
     public static int[] to = new int[]{
             R.id.etName,
             R.id.etSurname,
             R.id.etPatronymic,
-            R.id.etPassport,
-            R.id.etSex,
-            R.id.etBirthDate,
-            R.id.etPhone,
-            R.id.etMail
+            R.id.etPassport
     };
 
     public ClientFragment() {

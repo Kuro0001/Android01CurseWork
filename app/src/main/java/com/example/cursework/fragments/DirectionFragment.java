@@ -99,7 +99,22 @@ public class DirectionFragment extends Fragment {
         binding.btnAdd.setOnClickListener(this::onAdd);
         binding.btnEdit.setOnClickListener(this::onEdit);
         binding.btnDelete.setOnClickListener(this::onDelete);
-        binding.lvDirections.setOnItemClickListener(this::onClickList);
+//        binding.lvDirections.setOnItemClickListener(this::onClickList);
+        binding.lvDirections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                directionId = (int)l;
+                if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
+//            binding.edEnterName.setText(String.valueOf(directionId));
+                    Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
+                    binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                    setEnabled(true);
+                }else {
+                    setEnabled(false);
+                }
+            }
+        });
+
         setEnabled(false);
         dbHelper = new DBHelper(getContext());
         readDB();
@@ -141,14 +156,42 @@ public class DirectionFragment extends Fragment {
                 null);
         simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_direction , cursor, from, to, 0);
         binding.lvDirections.setAdapter(simpleCursorAdapter);
-        binding.lvDirections.setOnItemClickListener(this::onClickList);
+//        binding.lvDirections.setOnItemClickListener(this::onClickList);
 
+        binding.lvDirections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                directionId = (int)l;
+                if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
+//            binding.edEnterName.setText(String.valueOf(directionId));
+                    Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
+                    binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                    setEnabled(true);
+                }else {
+                    setEnabled(false);
+                }
+            }
+        });
 
         if(cursor.moveToFirst() == true){
             //Получение индексов
             do {
                 simpleCursorAdapter.changeCursor(cursor);
-                binding.lvDirections.setOnItemClickListener(this::onClickList);
+//                binding.lvDirections.setOnItemClickListener(this::onClickList);
+                binding.lvDirections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        directionId = (int)l;
+                        if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
+//            binding.edEnterName.setText(String.valueOf(directionId));
+                            Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
+                            binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                            setEnabled(true);
+                        }else {
+                            setEnabled(false);
+                        }
+                    }
+                });
             } while (cursor.moveToNext() == true);
         }
 //        cursor.close();

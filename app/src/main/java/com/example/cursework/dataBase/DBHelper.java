@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
  */
 public class DBHelper extends SQLiteOpenHelper {
     public static final String tagDB = "tagDB";
-    public static final int DATABASE_VERSION = 12;
+    public static final int DATABASE_VERSION = 17;
     public static final String DATABASE_NAME = "tourist_agency";
 
     public static final String TABLE_NAME_DIRECTIONS = "directions";
@@ -148,7 +148,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + KEY_CLIENTS_NAME + " text,"
                 + KEY_CLIENTS_SURNAME + " text,"
                 + KEY_CLIENTS_PATRONYMIC + " text,"
-                + KEY_CLIENTS_BIRTHDATE + " text,"
+                + KEY_CLIENTS_BIRTHDATE + " integer,"
                 + KEY_CLIENTS_SEX + " text,"
                 + KEY_CLIENTS_PHONE + " text,"
                 + KEY_CLIENTS_MAIL + " text,"
@@ -158,7 +158,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "("
                 + KEY_TOURS_ID + " integer primary key autoincrement,"
                 + KEY_TOURS_NAME + " text,"
-                + KEY_TOURS_START_DATE + " text,"
+                + KEY_TOURS_START_DATE + " integer,"
                 + KEY_TOURS_DAYS_COUNT + " integer,"
                 + KEY_TOURS_OFFERS_ALL + " integer,"
                 + KEY_TOURS_PRICE + " real,"
@@ -171,7 +171,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "("
                 + KEY_VOUCHERS_ID + " integer primary key autoincrement,"
                 + KEY_VOUCHERS_NAME + " text,"
-                + KEY_VOUCHERS_DATE + " text,"
+                + KEY_VOUCHERS_DATE + " integer,"
                 + KEY_VOUCHERS_PRICE + " real,"
                 + KEY_VOUCHERS_ID_TOUR + " integer,"
                 + KEY_VOUCHERS_ID_EMPLOYEE + " integer,"
