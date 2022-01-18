@@ -281,5 +281,4 @@ public class TourOperatorDetailFragment extends Fragment {
         }
         toast.show();
     }
-
 }

@@ -88,6 +88,13 @@ public class AccountFragment extends Fragment {
             return true;
         return false;
     }
+
+    /**
+     * Метод поиска пользователя по параметрам
+     * @param login
+     * @param password
+     * @return
+     */
     public int findUser(String login, String password){
         database = dbHelper.getReadableDatabase();
         cursor = database.query(DBHelper.TABLE_NAME_EMPLOYEES,
@@ -181,6 +188,10 @@ public class AccountFragment extends Fragment {
         toast.show();
     }
 
+    /**
+     * Метод для навигации на форму данных пользователя
+     * @param view
+     */
     public void onGoToAccount(View view){
         Bundle bundle = new Bundle();
         bundle.putInt("id", Authorisation.id);
