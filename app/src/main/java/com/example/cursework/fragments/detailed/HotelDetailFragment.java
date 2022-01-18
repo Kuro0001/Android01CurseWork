@@ -103,11 +103,10 @@ public class HotelDetailFragment extends Fragment {
 
         selectedHotelId = getArguments().getInt("id");
         if (selectedHotelId >= 0) {
-            setEnabled(true);
             readDbHotel();
-        } else {
-            setEnabled(false);
         }
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else  setEnabled(false);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, directionNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -137,11 +136,13 @@ public class HotelDetailFragment extends Fragment {
      * Метод предоставления и закрытия доступа к компонентам изменения БД
      * @param status
      */
-    public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
-            binding.btnAdd.setEnabled(status);
-            binding.btnEdit.setEnabled(status);
-            binding.btnDelete.setEnabled(status);
+    public void setEnabled(boolean status) {
+        binding.btnAdd.setEnabled(status);
+        binding.btnEdit.setEnabled(status);
+        binding.btnDelete.setEnabled(status);
+        if (selectedHotelId < 0) {
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 

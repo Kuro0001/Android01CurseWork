@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
         binding.btnEmployees.setOnClickListener(this::onEmployee);
         binding.btnClients.setOnClickListener(this::onClient);
         binding.btnTours.setOnClickListener(this::onTour);
+        binding.btnVouchers.setOnClickListener(this::onVoucher);
         return root;
     }
 
@@ -43,36 +44,94 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
+    /**
+     * Метод для навигации к фрагменту Направлений
+     * @param view
+     */
     public void onDirection(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_direction);
+        host.navigate(R.id.fragment_direction, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Отелей
+     * @param view
+     */
     public void onHotel(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_hotel);
+        host.navigate(R.id.fragment_hotel, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Видов туров
+     * @param view
+     */
     public void onKind(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_kinds);
+        host.navigate(R.id.fragment_kinds, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Категорий туров
+     * @param view
+     */
     public void onCategory(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_category);
+        host.navigate(R.id.fragment_category, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Туроператоров
+     * @param view
+     */
     public void onTourOperator(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_tour_operator);
+        host.navigate(R.id.fragment_tour_operator, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Сотрудников
+     * @param view
+     */
     public void onEmployee(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_employee);
+        host.navigate(R.id.fragment_employee, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Клиентов
+     * @param view
+     */
     public void onClient(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_client);
+        host.navigate(R.id.fragment_client, bundle);
     }
+    /**
+     * Метод для навигации к фрагменту Туров
+     * @param view
+     */
     public void onTour(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
         NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_tour);
+        host.navigate(R.id.fragment_tour, bundle);
+    }
+    /**
+     * Метод для навигации к фрагменту Путевок
+     * @param view
+     */
+    public void onVoucher(View view){
+        Bundle bundle = new Bundle();
+        bundle.putString("action", "view");
+        NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+        host.navigate(R.id.fragment_voucher, bundle);
     }
 }

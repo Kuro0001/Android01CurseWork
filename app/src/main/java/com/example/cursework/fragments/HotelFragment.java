@@ -175,7 +175,7 @@ public class HotelFragment extends Fragment {
         cursor.moveToPosition(position);
         int indID = cursor.getColumnIndex(names[0]);
         hotelId = cursor.getInt(indID);
-        if (getArguments().getString("action") == "choose") {
+        if (getArguments().getString("action").equals("choose")) {
             NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
             String key = "select_hotel";
             Bundle bundle = new Bundle();

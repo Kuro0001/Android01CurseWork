@@ -99,23 +99,19 @@ public class DirectionFragment extends Fragment {
         binding.btnAdd.setOnClickListener(this::onAdd);
         binding.btnEdit.setOnClickListener(this::onEdit);
         binding.btnDelete.setOnClickListener(this::onDelete);
-//        binding.lvDirections.setOnItemClickListener(this::onClickList);
         binding.lvDirections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 directionId = (int)l;
                 if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
-//            binding.edEnterName.setText(String.valueOf(directionId));
                     Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
                     binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
-                    setEnabled(true);
-                }else {
-                    setEnabled(false);
                 }
             }
         });
 
-        setEnabled(false);
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else  setEnabled(false);
         dbHelper = new DBHelper(getContext());
         readDB();
         return root;
@@ -134,10 +130,12 @@ public class DirectionFragment extends Fragment {
      * @param status
      */
     public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
             binding.btnAdd.setEnabled(status);
             binding.btnEdit.setEnabled(status);
             binding.btnDelete.setEnabled(status);
+        if (directionId < 0){
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 

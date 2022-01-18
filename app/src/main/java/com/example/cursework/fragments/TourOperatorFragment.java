@@ -109,7 +109,7 @@ public class TourOperatorFragment extends Fragment {
     }
     @Override
     public void onDestroyView() {
-        Log.d(tagDB, "Вызов метода onDestroyView фрагмента DirectionFragment");
+        Log.d(tagDB, "Вызов метода onDestroyView фрагмента TourOperatorFragment");
         super.onDestroyView();
         binding = null;
 //        cursor.close();
@@ -151,7 +151,7 @@ public class TourOperatorFragment extends Fragment {
      * @param id
      */
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
-        if (getArguments().getString("action") == "choose") {
+        if (getArguments().getString("action").equals("choose")) {
             NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
             String key = "select_tour_operator";
             Bundle bundle = new Bundle();

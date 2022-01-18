@@ -97,7 +97,8 @@ public class KindsFragment extends Fragment {
         binding.btnEdit.setOnClickListener(this::onEdit);
         binding.btnDelete.setOnClickListener(this::onDelete);
         binding.lvKinds.setOnItemClickListener(this::onClickList);
-        setEnabled(false);
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else  setEnabled(false);
         dbHelper = new DBHelper(getContext());
         readDB();
         return root;
@@ -115,11 +116,13 @@ public class KindsFragment extends Fragment {
      * Метод предоставления и закрытия доступа к компонентам изменения БД
      * @param status
      */
-    public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
-            binding.btnAdd.setEnabled(status);
-            binding.btnEdit.setEnabled(status);
-            binding.btnDelete.setEnabled(status);
+    public void setEnabled(boolean status) {
+        binding.btnAdd.setEnabled(status);
+        binding.btnEdit.setEnabled(status);
+        binding.btnDelete.setEnabled(status);
+        if (kindId < 0) {
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 
@@ -160,7 +163,7 @@ public class KindsFragment extends Fragment {
      */
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
         kindId = (int)id;
-        if (getArguments().getString("action") == "choose"){
+        if (getArguments().getString("action").equals("choose")){
             NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
             String key = "select_kind";
             Bundle bundle = new Bundle();

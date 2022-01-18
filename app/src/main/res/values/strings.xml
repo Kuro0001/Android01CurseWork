@@ -72,6 +72,16 @@
     <string name="list_tour_column_direction">Direction: </string>
     <string name="list_tour_column_vouchers_done">Vouchers: </string>
 
+    <string name="title_voucher">Voucher</string>
+    <string name="list_voucher_column_name">Name: </string>
+    <string name="list_voucher_column_date">Date: </string>
+    <string name="list_voucher_column_price">Price: </string>
+
+    <string name="title_work_results">Work results</string>
+    <string name="title_work_results_date_start">Count with</string>
+    <string name="title_work_results_date_end">Count up</string>
+    <string name="title_work_results_vouchers_count">Vouchers count</string>
+    <string name="title_work_results_money_sum">Cash sum</string>
 
     <string name="button_on_select_out_table_row">Select</string>
 
@@ -97,6 +107,7 @@
     <string name="action_search_OK">Found %1$d rows</string>
     <string name="action_search_null">No records matching search parameters</string>
     <string name="action_result_ERROR">Action cant be completed</string>
+    <string name="action_search_tour_full_vouchers">Selected tour has no free offers</string>
 
     <string name="action_authorisation_login_not_exist">Login dose not exist</string>
     <string name="action_authorisation_wrong_password">Wrong password</string>

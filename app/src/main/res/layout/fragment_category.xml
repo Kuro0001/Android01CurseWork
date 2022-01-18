@@ -44,7 +44,7 @@
                 android:inputType="numberDecimal"
                 android:minHeight="48dp"
                 android:text="Name"
-                tools:text="@string/list_category_column_added_value" />
+                tools:text="0.0" />
 
             <TextView
                 android:id="@+id/tvDiscount"
@@ -59,7 +59,7 @@
                 android:ems="10"
                 android:inputType="numberDecimal"
                 android:minHeight="48dp"
-                android:text="@string/list_category_column_discount" />
+                android:text="0" />
 
         </LinearLayout>
 

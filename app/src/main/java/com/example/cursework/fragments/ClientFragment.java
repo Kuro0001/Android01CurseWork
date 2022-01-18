@@ -149,10 +149,19 @@ public class ClientFragment extends Fragment {
      * @param id
      */
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", (int)id);
-        NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_client_detail,bundle);
+        if (getArguments().getString("action").equals("choose")) {
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            String key = "select_client";
+            Bundle bundle = new Bundle();
+            bundle.putInt(key, (int) id);
+            requireActivity().getSupportFragmentManager().setFragmentResult(key, bundle);
+            host.popBackStack();
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", (int) id);
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            host.navigate(R.id.fragment_client_detail, bundle);
+        }
     }
     /**
      * Метод для создания новой записи

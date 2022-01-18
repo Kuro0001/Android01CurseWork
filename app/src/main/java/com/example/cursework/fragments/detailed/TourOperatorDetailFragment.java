@@ -92,11 +92,10 @@ public class TourOperatorDetailFragment extends Fragment {
 
         selectedTourOperatorID = getArguments().getInt("id");
         if (selectedTourOperatorID >= 0) {
-            setEnabled(true);
             readDb();
-        } else {
-            setEnabled(false);
         }
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else  setEnabled(false);
         return root;
 //        return inflater.inflate(R.layout.fragment_tour_operator_detail, container, false);
     }
@@ -106,10 +105,12 @@ public class TourOperatorDetailFragment extends Fragment {
      * @param status
      */
     public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
             binding.btnAdd.setEnabled(status);
             binding.btnEdit.setEnabled(status);
             binding.btnDelete.setEnabled(status);
+        if (selectedTourOperatorID < 0){
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 

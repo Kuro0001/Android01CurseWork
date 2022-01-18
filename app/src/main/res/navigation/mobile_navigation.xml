@@ -34,13 +34,23 @@
         <action
             android:id="@+id/action_navigation_home_to_fragment_tour"
             app:destination="@id/fragment_tour" />
+        <action
+            android:id="@+id/action_navigation_home_to_fragment_voucher"
+            app:destination="@id/fragment_voucher" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_new_voucher"
         android:name="com.example.cursework.ui.newVoucher.NewVoucherFragment"
         android:label="@string/title_new_voucher"
-        tools:layout="@layout/fragment_new_voucher" />
+        tools:layout="@layout/fragment_new_voucher" >
+        <action
+            android:id="@+id/action_navigation_new_voucher_to_fragment_client"
+            app:destination="@id/fragment_client" />
+        <action
+            android:id="@+id/action_navigation_new_voucher_to_fragment_tour"
+            app:destination="@id/fragment_tour" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_account"
@@ -148,5 +158,28 @@
         android:id="@+id/fragment_tour_detail"
         android:name="com.example.cursework.fragments.detailed.TourDetailFragment"
         android:label="@string/title_tour"
-        tools:layout="@layout/fragment_tour_detail" />
+        tools:layout="@layout/fragment_tour_detail" >
+        <action
+            android:id="@+id/action_fragment_tour_detail_to_fragment_kinds"
+            app:destination="@id/fragment_kinds" />
+        <action
+            android:id="@+id/action_fragment_tour_detail_to_fragment_category"
+            app:destination="@id/fragment_category" />
+        <action
+            android:id="@+id/action_fragment_tour_detail_to_fragment_hotel"
+            app:destination="@id/fragment_hotel" />
+        <action
+            android:id="@+id/action_fragment_tour_detail_to_fragment_tour_operator"
+            app:destination="@id/fragment_tour_operator" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_voucher"
+        android:name="com.example.cursework.fragments.VoucherFragment"
+        android:label="@string/title_voucher"
+        tools:layout="@layout/fragment_voucher" >
+        <action
+            android:id="@+id/action_fragment_voucher_to_navigation_new_voucher"
+            app:destination="@id/navigation_new_voucher" />
+    </fragment>
 </navigation>

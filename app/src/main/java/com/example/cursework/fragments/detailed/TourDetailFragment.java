@@ -47,7 +47,10 @@ public class TourDetailFragment extends Fragment {
     int selectedTourOperatorID;
     int selectedKindID;
     int selectedCategoryID;
-    int vouchersCount;
+    int selectedHotelID1 = -1;
+    int selectedTourOperatorID1 = -1;
+    int selectedKindID1 = -1;
+    int selectedCategoryID1 = -1;
     String[] days = new String[31];
     String[] months = new String[12];
     String[] years = new String[50];
@@ -115,16 +118,21 @@ public class TourDetailFragment extends Fragment {
         dbHelper = new DBHelper(getContext());
         selectedID = getArguments().getInt("id");
         if (selectedID > 0) {
-            setEnabled(true);
             readDb();
-        } else {
-            setEnabled(false);
         }
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else  setEnabled(false);
         setSpinners();
         setListeners();
 
         return root;
 //        return inflater.inflate(R.layout.fragment_tour_detail, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     /**
@@ -134,8 +142,9 @@ public class TourDetailFragment extends Fragment {
         requireActivity().getSupportFragmentManager().setFragmentResultListener(key1, getViewLifecycleOwner(), new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                if (requestKey == key1){
-                    selectedKindID = result.getInt(requestKey);
+                if (requestKey.equals(key1)){
+                    Log.d(tagDB, "Вызов метода setListeners фрагмента TourDetailFragment - key 1");
+                    selectedKindID1 = result.getInt(requestKey);
                     setKind();
                 }
             }
@@ -143,8 +152,9 @@ public class TourDetailFragment extends Fragment {
         requireActivity().getSupportFragmentManager().setFragmentResultListener(key2, getViewLifecycleOwner(), new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                if (requestKey == key2){
-                    selectedCategoryID = result.getInt(requestKey);
+                if (requestKey.equals(key2)){
+                    Log.d(tagDB, "Вызов метода setListeners фрагмента TourDetailFragment - key 2");
+                    selectedCategoryID1 = result.getInt(requestKey);
                     setCategory();
                 }
             }
@@ -152,8 +162,9 @@ public class TourDetailFragment extends Fragment {
         requireActivity().getSupportFragmentManager().setFragmentResultListener(key3, getViewLifecycleOwner(), new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                if (requestKey == key3){
-                    selectedTourOperatorID = result.getInt(requestKey);
+                if (requestKey.equals(key3)){
+                    Log.d(tagDB, "Вызов метода setListeners фрагмента TourDetailFragment - key 3");
+                    selectedTourOperatorID1 = result.getInt(requestKey);
                     setTourOperator();
                 }
             }
@@ -161,8 +172,9 @@ public class TourDetailFragment extends Fragment {
         requireActivity().getSupportFragmentManager().setFragmentResultListener(key4, getViewLifecycleOwner(), new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                if (requestKey == key4){
-                    selectedHotelID = result.getInt(requestKey);
+                if (requestKey.equals(key4)){
+                    Log.d(tagDB, "Вызов метода setListeners фрагмента TourDetailFragment - key 4");
+                    selectedHotelID1 = result.getInt(requestKey);
                     setHotel();
                 }
             }
@@ -227,8 +239,8 @@ public class TourDetailFragment extends Fragment {
         });
 
         if(getArguments().getInt("id") > 0){
-            binding.spnMonth.setSelection(day);
-            binding.spnDay.setSelection(month);
+            binding.spnDay.setSelection(day);
+            binding.spnMonth.setSelection(month);
             binding.spnYear.setSelection(year);
         }
     }
@@ -238,10 +250,12 @@ public class TourDetailFragment extends Fragment {
      * @param status
      */
     public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
             binding.btnAdd.setEnabled(status);
             binding.btnEdit.setEnabled(status);
             binding.btnDelete.setEnabled(status);
+        if (selectedID < 0) {
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 
@@ -266,7 +280,7 @@ public class TourDetailFragment extends Fragment {
             int indName = cursor.getColumnIndex(DBHelper.KEY_TOURS_NAME);
             binding.etName.setText(cursor.getString(indName));
             int indDaysCount = cursor.getColumnIndex(DBHelper.KEY_TOURS_DAYS_COUNT);
-            binding.etDaysCount.setText(cursor.getInt(indDaysCount));
+            binding.etDaysCount.setText(String.valueOf(cursor.getInt(indDaysCount)));
             int indOffers = cursor.getColumnIndex(DBHelper.KEY_TOURS_OFFERS_ALL);
             binding.etOffersCount.setText(String.valueOf(cursor.getFloat(indOffers)));
             int indPrice = cursor.getColumnIndex(DBHelper.KEY_TOURS_PRICE);
@@ -276,6 +290,7 @@ public class TourDetailFragment extends Fragment {
                     " WHERE " + DBHelper.TABLE_NAME_VOUCHERS + "." + DBHelper.KEY_VOUCHERS_ID_TOUR +
                     " = " + selectedID;
             Cursor cursor1 = database.rawQuery(query, null);
+            cursor1.moveToFirst();
             int indVouchersCount = cursor1.getColumnIndex("vouchers_count");
             binding.etVouchers.setText(String.valueOf(cursor1.getInt(indVouchersCount)));
 
@@ -283,7 +298,7 @@ public class TourDetailFragment extends Fragment {
             long startDate = cursor.getLong(indDate);
             day = (int)(startDate % 100)-1;
             month = (int)(startDate /100 % 100)-1;
-            year = (int)(2050 - startDate /10000);
+            year = (int)(startDate /10000)-2000;
             setSpinners();
 
             int indTourOperator = cursor.getColumnIndex(DBHelper.KEY_TOURS_ID_TOUR_OPERATOR);
@@ -306,6 +321,9 @@ public class TourDetailFragment extends Fragment {
      * Метод заполненния полей туроператора на форме туров
      */
     public void setTourOperator(){
+        Log.d(tagDB, "Вызов метода setTourOperator фрагмента TourDetailFragment");
+        if (selectedTourOperatorID1 > -1)
+            selectedTourOperatorID = selectedTourOperatorID1;
         database = dbHelper.getReadableDatabase();
         Cursor cursor1 = database.query(DBHelper.TABLE_NAME_TOUR_OPERATORS,
                 null,
@@ -324,6 +342,9 @@ public class TourDetailFragment extends Fragment {
      * Метод заполненния полей вида тура на форме туров
      */
     public void setKind(){
+        Log.d(tagDB, "Вызов метода setKind фрагмента TourDetailFragment");
+        if (selectedKindID1 > -1)
+            selectedKindID = selectedKindID1;
         database = dbHelper.getReadableDatabase();
         Cursor cursor1 = database.query(DBHelper.TABLE_NAME_KINDS,
                 null,
@@ -342,6 +363,9 @@ public class TourDetailFragment extends Fragment {
      * Метод заполненния полей категории тура на форме туров
      */
     public void setCategory(){
+        Log.d(tagDB, "Вызов метода setCategory фрагмента TourDetailFragment");
+        if (selectedCategoryID1 > -1)
+            selectedCategoryID = selectedCategoryID1;
         database = dbHelper.getReadableDatabase();
         Cursor cursor1 = database.query(DBHelper.TABLE_NAME_CATEGORIES,
                 null,
@@ -364,6 +388,9 @@ public class TourDetailFragment extends Fragment {
      * Метод заполненния полей отеля на форме туров
      */
     public void setHotel(){
+        Log.d(tagDB, "Вызов метода setHotel фрагмента TourDetailFragment");
+        if (selectedHotelID1 > -1)
+            selectedHotelID = selectedHotelID1;
         database = dbHelper.getReadableDatabase();
         Cursor cursor1;
         String query = "SELECT hotel." + DBHelper.KEY_HOTELS_ID +
@@ -494,7 +521,7 @@ public class TourDetailFragment extends Fragment {
             contentValues.put(DBHelper.KEY_TOURS_ID_HOTEL, String.valueOf(selectedHotelID));
             String where = DBHelper.KEY_TOURS_ID + "=" + selectedID;
 
-            long result = database.update(DBHelper.TABLE_NAME_CLIENTS, contentValues, where, null);
+            long result = database.update(DBHelper.TABLE_NAME_TOURS, contentValues, where, null);
             if (result > 0) {
                 Log.d(tagDB, getResources().getString(R.string.action_result_OK));
                 toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);

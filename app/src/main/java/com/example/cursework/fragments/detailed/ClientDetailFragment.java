@@ -107,11 +107,10 @@ public class ClientDetailFragment extends Fragment {
 
         selectedID = getArguments().getInt("id");
         if (selectedID > 0) {
-            setEnabled(true);
             readDb();
-        } else {
-            setEnabled(false);
         }
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else  setEnabled(false);
         setSpinners();
         return root;
 //        return inflater.inflate(R.layout.fragment_client_detail, container, false);
@@ -184,11 +183,14 @@ public class ClientDetailFragment extends Fragment {
      * Метод предоставления и закрытия доступа к компонентам изменения БД
      * @param status
      */
-    public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
-            binding.btnAdd.setEnabled(status);
-            binding.btnEdit.setEnabled(status);
-            binding.btnDelete.setEnabled(status);
+    public void setEnabled(boolean status) {
+        binding.btnAdd.setEnabled(status);
+        binding.btnEdit.setEnabled(status);
+        binding.btnDelete.setEnabled(status);
+
+        if (selectedID < 0){
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 

@@ -82,21 +82,17 @@ public class EmployeeDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentEmployeeDetailBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
-
         binding.btnAdd.setOnClickListener(this::onAdd);
         binding.btnEdit.setOnClickListener(this::onEdit);
         binding.btnDelete.setOnClickListener(this::onDelete);
-
         dbHelper = new DBHelper(getContext());
-
 
         selectedId = getArguments().getInt("id");
         if (selectedId >= 0) {
-            setEnabled(true);
             readDb();
-        } else {
-            setEnabled(false);
         }
+        if (Authorisation.isLoggedIn) setEnabled(true);
+        else setEnabled(false);
         return root;
 //        return inflater.inflate(R.layout.fragment_employee_detail, container, false);
     }
@@ -105,11 +101,14 @@ public class EmployeeDetailFragment extends Fragment {
      * Метод предоставления и закрытия доступа к компонентам изменения БД
      * @param status
      */
-    public void setEnabled(boolean status){
-        if (Authorisation.isLoggedIn) {
-            binding.btnAdd.setEnabled(status);
-            binding.btnEdit.setEnabled(status);
-            binding.btnDelete.setEnabled(status);
+    public void setEnabled(boolean status) {
+        binding.btnAdd.setEnabled(status);
+        binding.btnEdit.setEnabled(status);
+        binding.btnDelete.setEnabled(status);
+
+        if (selectedId < 0) {
+            binding.btnEdit.setEnabled(false);
+            binding.btnDelete.setEnabled(false);
         }
     }
 

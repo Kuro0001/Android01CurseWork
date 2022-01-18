@@ -46,7 +46,6 @@ public class TourFragment extends Fragment {
     SQLiteDatabase database;
     SimpleCursorAdapter simpleCursorAdapter;
     Cursor cursor;
-    int selectedID;
     String[] months = new String[12];
     String[] years = new String[50];
     int month = 0;
@@ -190,7 +189,7 @@ public class TourFragment extends Fragment {
                 " = " + DBHelper.TABLE_NAME_CATEGORIES + "." + DBHelper.KEY_CATEGORIES_ID;
 
         cursor = database.rawQuery(query,null);
-        simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_hotel , cursor, from, to, 0);
+        simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_tour , cursor, from, to, 0);
         binding.lvTour.setAdapter(simpleCursorAdapter);
         binding.lvTour.setOnItemClickListener(this::onClickList);
 
@@ -199,6 +198,7 @@ public class TourFragment extends Fragment {
             do {
                 simpleCursorAdapter.changeCursor(cursor);
                 binding.lvTour.setOnItemClickListener(this::onClickList);
+                cursor.moveToNext();
             } while (cursor.isAfterLast() != true);
         }
 //        cursor.close();
@@ -213,10 +213,43 @@ public class TourFragment extends Fragment {
      * @param id
      */
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", (int)id);
-        NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-        host.navigate(R.id.fragment_tour_detail,bundle);
+        if (getArguments().getString("action").equals("choose")) {
+            database = dbHelper.getReadableDatabase();
+            String query = "SELECT COUNT (*) as vouchers_count" +
+                    " FROM " + DBHelper.TABLE_NAME_VOUCHERS +
+                    " WHERE " + DBHelper.TABLE_NAME_VOUCHERS + "." + DBHelper.KEY_VOUCHERS_ID_TOUR +
+                    " = " + String.valueOf(id);
+            Cursor cursor1 = database.rawQuery(query, null);
+            cursor1.moveToFirst();
+            int indVouchersCount = cursor1.getColumnIndex("vouchers_count");
+            int vouchersCount = cursor1.getInt(indVouchersCount);
+
+            query = "SELECT " + DBHelper.KEY_TOURS_OFFERS_ALL + " as offers_count" +
+                    " FROM " + DBHelper.TABLE_NAME_TOURS +
+                    " WHERE " + DBHelper.KEY_TOURS_ID +
+                    " = " + String.valueOf(id);
+            cursor1 = database.rawQuery(query, null);
+            cursor1.moveToFirst();
+            int indOffersCount = cursor1.getColumnIndex("offers_count");
+            int offersCount = cursor1.getInt(indOffersCount);
+
+            if (vouchersCount < offersCount) {
+                NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+                String key = "select_tour";
+                Bundle bundle = new Bundle();
+                bundle.putInt(key, (int) id);
+                requireActivity().getSupportFragmentManager().setFragmentResult(key, bundle);
+                host.popBackStack();
+            }else {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_tour_full_vouchers),Toast.LENGTH_LONG);
+                Log.d(tagDB, getResources().getString(R.string.action_search_tour_full_vouchers));
+            }
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", (int) id);
+            NavController host = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            host.navigate(R.id.fragment_tour_detail, bundle);
+        }
     }
 
     /**
@@ -234,6 +267,7 @@ public class TourFragment extends Fragment {
      * @param view
      */
     public void onSearch(View view){
+        Log.d(tagDB, "Вызов метода onSearch фрагмента TourFragment");
         String date1 = years[year] + months[month] + "00";
         String date2;
         if (month == 11)
@@ -257,9 +291,10 @@ public class TourFragment extends Fragment {
                 " = " + DBHelper.TABLE_NAME_CATEGORIES + "." + DBHelper.KEY_CATEGORIES_ID +
                 " WHERE " + DBHelper.TABLE_NAME_TOURS + "." + DBHelper.KEY_TOURS_START_DATE +
                 " > " + date1 + " AND "+ DBHelper.TABLE_NAME_TOURS + "." + DBHelper.KEY_TOURS_START_DATE +
-                " < " + date2 + " AND " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID +
+                " < " + date2 + " AND " + DBHelper.TABLE_NAME_TOURS + "." + DBHelper.KEY_TOURS_ID_HOTEL +
                 " IN (SELECT " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID +
-                " INNER JOIN " + DBHelper.TABLE_NAME_DIRECTIONS + " as direction" +
+                " FROM " +  DBHelper.TABLE_NAME_HOTELS +
+                " INNER JOIN " + DBHelper.TABLE_NAME_DIRECTIONS +
                 " on " + DBHelper.TABLE_NAME_HOTELS + "." + DBHelper.KEY_HOTELS_ID_DIRECTION +
                 " = " + DBHelper.TABLE_NAME_DIRECTIONS + "." + DBHelper.KEY_DIRECTIONS_ID +
                 " WHERE " + DBHelper.TABLE_NAME_DIRECTIONS + "." + DBHelper.KEY_DIRECTIONS_NAME +
@@ -270,7 +305,7 @@ public class TourFragment extends Fragment {
 
         if(cursor.moveToFirst() == true) {
             {
-                simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_client , cursor, from, to, 0);
+                simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_tour , cursor, from, to, 0);
                 binding.lvTour.setAdapter(simpleCursorAdapter);
                 binding.lvTour.setOnItemClickListener(this::onClickList);
                 toast = Toast.makeText(getContext(), getResources().getString(R.string.action_search_OK,cursor.getCount()),Toast.LENGTH_LONG);
@@ -280,6 +315,7 @@ public class TourFragment extends Fragment {
                     do {
                         simpleCursorAdapter.changeCursor(cursor);
                         binding.lvTour.setOnItemClickListener(this::onClickList);
+                        cursor.moveToNext();
                     } while (cursor.moveToNext() == true);
                 }
             }
