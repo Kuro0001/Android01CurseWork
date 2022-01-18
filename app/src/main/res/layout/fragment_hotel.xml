@@ -19,7 +19,7 @@
                 android:id="@+id/twSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/title_hotel" />
+                android:text="@string/title_direction" />
 
             <EditText
                 android:id="@+id/etSearchDirectionName"
@@ -28,7 +28,8 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
-                android:text="@string/title_hotel" />
+                android:text="@string/title_empty"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
             <Button
                 android:id="@+id/btnSearch"

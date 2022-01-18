@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
 import com.example.cursework.R;
+import com.example.cursework.Validation;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentHotelDetailBinding;
 
@@ -114,7 +115,7 @@ public class HotelDetailFragment extends Fragment {
         binding.spnDirection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedDirectionId = (int)id+1;
+                selectedDirectionId = directionIds[position];
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -171,9 +172,6 @@ public class HotelDetailFragment extends Fragment {
                 directionIds[i] = cursor.getInt(indID);
                 int indName = cursor.getColumnIndex(DBHelper.KEY_DIRECTIONS_NAME);
                 directionNames[i] = cursor.getString(indName);
-//                if (selectedDirectionId > 0 && selectedDirectionId == directionIds[i]){
-//                    binding.spnDirection.setSelection(i);
-//                }
                 i++;
             } while (cursor.moveToNext() == true);
         }
@@ -228,19 +226,34 @@ public class HotelDetailFragment extends Fragment {
     }
 
     /**
+     * Метод для проверки введеных данных пользователем
+     * @return
+     */
+    public boolean isCorrectInput(){
+        if(!Validation.isRightName(binding.etHotelName.getText().toString())) return false;
+        return true;
+    }
+
+    /**
      * Метод добавления записи в БД
      * @param view
      */
     public void onAdd(View view){
         Log.d(tagDB, "Вызов метода onAdd фрагмента HotelDetailFragment");
         database = dbHelper.getWritableDatabase();
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DBHelper.KEY_HOTELS_NAME, binding.etHotelName.getText().toString());
+            contentValues.put(DBHelper.KEY_HOTELS_ADDRESS, binding.etHotelAddress.getText().toString());
+            contentValues.put(DBHelper.KEY_HOTELS_ID_DIRECTION, String.valueOf(selectedDirectionId));
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_HOTELS_NAME, binding.etHotelName.getText().toString());
-        contentValues.put(DBHelper.KEY_HOTELS_ADDRESS, binding.etHotelAddress.getText().toString());
-        contentValues.put(DBHelper.KEY_HOTELS_ID_DIRECTION, String.valueOf(selectedDirectionId));
-
-        long result = database.insert(DBHelper.TABLE_NAME_HOTELS, null, contentValues);
+            long result = database.insert(DBHelper.TABLE_NAME_HOTELS, null, contentValues);
             if (result > 0) {
                 Log.d(tagDB, getResources().getString(R.string.action_result_OK));
                 toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
@@ -248,6 +261,7 @@ public class HotelDetailFragment extends Fragment {
                 Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
                 toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
             }
+        }
         toast.show();
     }
 
@@ -258,26 +272,34 @@ public class HotelDetailFragment extends Fragment {
     public void onEdit(View view){
         Log.d(tagDB, "Вызов метода onEdit фрагмента HotelDetailFragment");
         database = dbHelper.getWritableDatabase();
-        if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS, DBHelper.KEY_DIRECTIONS_ID, selectedDirectionId)) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DBHelper.KEY_HOTELS_NAME, binding.etHotelName.getText().toString());
-            contentValues.put(DBHelper.KEY_HOTELS_ADDRESS, binding.etHotelAddress.getText().toString());
-            contentValues.put(DBHelper.KEY_HOTELS_ID_DIRECTION, String.valueOf(selectedDirectionId));
-            String where = DBHelper.KEY_DIRECTIONS_ID + "=" + selectedHotelId;
-
-            long result = database.update(DBHelper.TABLE_NAME_HOTELS, contentValues, where, null);
-            if (result > 0) {
-                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK),Toast.LENGTH_LONG);
-            }else {
-                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR),Toast.LENGTH_LONG);
-            }
-        }else {
+        if(!isCorrectInput()) {
             toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find),Toast.LENGTH_LONG);
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
             Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find));
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS, DBHelper.KEY_DIRECTIONS_ID, selectedDirectionId)) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DBHelper.KEY_HOTELS_NAME, binding.etHotelName.getText().toString());
+                contentValues.put(DBHelper.KEY_HOTELS_ADDRESS, binding.etHotelAddress.getText().toString());
+                contentValues.put(DBHelper.KEY_HOTELS_ID_DIRECTION, String.valueOf(selectedDirectionId));
+                String where = DBHelper.KEY_DIRECTIONS_ID + "=" + selectedHotelId;
+
+                long result = database.update(DBHelper.TABLE_NAME_HOTELS, contentValues, where, null);
+                if (result > 0) {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);
+                } else {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+                }
+            } else {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find), Toast.LENGTH_LONG);
+                Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find));
+            }
         }
         toast.show();
     }

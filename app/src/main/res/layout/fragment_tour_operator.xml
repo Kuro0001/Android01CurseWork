@@ -43,7 +43,8 @@
                 android:ems="10"
                 android:inputType="number"
                 android:minHeight="48dp"
-                android:text="@string/list_tour_operator_column_unique_number" />
+                android:text="@string/title_empty"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>
 

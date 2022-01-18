@@ -198,7 +198,7 @@ public class VoucherFragment extends Fragment {
                 " IN (SELECT " + DBHelper.TABLE_NAME_CLIENTS + "." + DBHelper.KEY_CLIENTS_ID +
                 " FROM " + DBHelper.TABLE_NAME_CLIENTS +
                 " WHERE " + DBHelper.TABLE_NAME_CLIENTS + "." + DBHelper.KEY_CLIENTS_PASSPORT +
-                " LIKE '%" + binding.etClientPassport.getText().toString() + "%'";
+                " LIKE '%" + binding.etClientPassport.getText().toString() + "%')";
         cursor = database.rawQuery(query,null);
 
         if(cursor.moveToFirst() == true) {

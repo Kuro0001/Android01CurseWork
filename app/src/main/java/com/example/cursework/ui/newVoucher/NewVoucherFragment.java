@@ -58,12 +58,9 @@ public class NewVoucherFragment extends Fragment {
             selectedID = getArguments().getInt("id");
         if (selectedID > 0) {
             readDb();
-        } else {
-            if (Authorisation.isLoggedIn)
-                setEmployee(Authorisation.id);
         }
         if (Authorisation.isLoggedIn) setEnabled(true);
-        else  setEnabled(false);
+        else setEnabled(false);
         setListeners();
         return root;
     }
@@ -154,7 +151,7 @@ public class NewVoucherFragment extends Fragment {
             int indСlient = cursor.getColumnIndex(DBHelper.KEY_VOUCHERS_ID_CLIENT);
             selectedClientID = cursor.getInt(indСlient);
             setClient();
-            int indEmployee = cursor.getColumnIndex(DBHelper.KEY_VOUCHERS_ID_CLIENT);
+            int indEmployee = cursor.getColumnIndex(DBHelper.KEY_VOUCHERS_ID_EMPLOYEE);
             selectedClientID = cursor.getInt(indEmployee);
             setEmployee(selectedClientID);
         }
@@ -364,7 +361,16 @@ public class NewVoucherFragment extends Fragment {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBHelper.KEY_VOUCHERS_NAME, binding.etVoucherName.getText().toString());
         contentValues.put(DBHelper.KEY_VOUCHERS_PRICE, binding.etVoucherPrice.getText().toString());
-        contentValues.put(DBHelper.KEY_VOUCHERS_DATE, binding.etVoucherDate.getText().toString());
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String date = String.valueOf(year);
+        if (month < 10) date += 0;
+        date += String.valueOf(month+1);
+        if (day < 10) date += 0;
+        date += String.valueOf(day);
+        contentValues.put(DBHelper.KEY_VOUCHERS_DATE, date);
         contentValues.put(DBHelper.KEY_VOUCHERS_ID_TOUR, String.valueOf(selectedTourID));
         contentValues.put(DBHelper.KEY_VOUCHERS_ID_CLIENT, String.valueOf(selectedClientID));
         contentValues.put(DBHelper.KEY_VOUCHERS_ID_EMPLOYEE, String.valueOf(Authorisation.id));
@@ -387,11 +393,23 @@ public class NewVoucherFragment extends Fragment {
     public void onEdit(View view) {
         Log.d(tagDB, "Вызов метода onEdit фрагмента NewVoucherFragment");
         database = dbHelper.getWritableDatabase();
+        setVoucher();
+        setVoucherName();
+        setEmployee(Authorisation.id);
         if (rowIsExist(DBHelper.TABLE_NAME_VOUCHERS, DBHelper.KEY_VOUCHERS_ID, selectedID)) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(DBHelper.KEY_VOUCHERS_NAME, binding.etVoucherName.getText().toString());
             contentValues.put(DBHelper.KEY_VOUCHERS_PRICE, binding.etVoucherPrice.getText().toString());
-            contentValues.put(DBHelper.KEY_VOUCHERS_DATE, binding.etVoucherDate.getText().toString());
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            String date = String.valueOf(year);
+            if (month < 10) date += 0;
+            date += String.valueOf(month+1);
+            if (day < 10) date += 0;
+            date += String.valueOf(day);
+            contentValues.put(DBHelper.KEY_VOUCHERS_DATE, date);
             contentValues.put(DBHelper.KEY_VOUCHERS_ID_TOUR, String.valueOf(selectedTourID));
             contentValues.put(DBHelper.KEY_VOUCHERS_ID_CLIENT, String.valueOf(selectedClientID));
             contentValues.put(DBHelper.KEY_VOUCHERS_ID_EMPLOYEE, String.valueOf(Authorisation.id));

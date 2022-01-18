@@ -26,9 +26,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:minHeight="48dp"
-                android:text="@string/list_employee_column_mail" />
+                android:text="@string/title_empty" />
         </LinearLayout>
 
         <LinearLayout

@@ -24,14 +24,14 @@
                 android:text="@string/list_direction_column_name" />
 
             <EditText
-                android:id="@+id/edEnterName"
+                android:id="@+id/etEnterName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="@string/list_direction_column_name"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:text="@string/title_empty"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <LinearLayout
                 android:layout_width="match_parent"

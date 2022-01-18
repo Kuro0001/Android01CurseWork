@@ -1,5 +1,6 @@
 package com.example.cursework.ui.account;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class AccountFragment extends Fragment {
         binding.btnLogOut.setOnClickListener(this::onLogOut);
         binding.btnGotoAccount.setOnClickListener(this::onGoToAccount);
         setButtonsState();
+        checkAccounts();
         return root;
     }
 
@@ -50,7 +52,7 @@ public class AccountFragment extends Fragment {
     }
 
     /**
-     * Метод по предохранению ползователя от нажатия нежелательных кнопок в зависимости от состояния авторизации
+     * Метод по предохранению ползователя от нажатия нежелательных кнопок в зависимости от авторизации
      */
     public void setButtonsState(){
         if (Authorisation.isLoggedIn){
@@ -104,6 +106,40 @@ public class AccountFragment extends Fragment {
     }
 
     /**
+     * Метод для создания пользователя, если в БД таких еще нет
+     */
+    public void checkAccounts() {
+        Log.d(tagDB, "Вызов метода checkAccounts фрагмента AccountFragment");
+        database = dbHelper.getReadableDatabase();
+        cursor = database.query(DBHelper.TABLE_NAME_EMPLOYEES,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        if (!cursor.moveToFirst()) {
+            Log.d(tagDB, "Вызов метода checkAccounts фрагмента EmployeeDetailFragment");
+            database = dbHelper.getWritableDatabase();
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DBHelper.KEY_EMPLOYEES_NAME, "admin");
+            contentValues.put(DBHelper.KEY_EMPLOYEES_SURNAME, "admin");
+            contentValues.put(DBHelper.KEY_EMPLOYEES_PATRONYMIC, "admin");
+            contentValues.put(DBHelper.KEY_EMPLOYEES_MAIL, "admin@admin.ru");
+            contentValues.put(DBHelper.KEY_EMPLOYEES_LOGIN, "1");
+            contentValues.put(DBHelper.KEY_EMPLOYEES_PASSWORD, "1");
+
+            long result = database.insert(DBHelper.TABLE_NAME_EMPLOYEES, null, contentValues);
+            if (result > 0) {
+                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+            } else {
+                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+            }
+        }
+    }
+
+    /**
      * Метод авторизации
      * @param view
      */
@@ -114,7 +150,7 @@ public class AccountFragment extends Fragment {
         String password = binding.etPassword.getText().toString();
         if (rowIsExist(DBHelper.TABLE_NAME_EMPLOYEES, DBHelper.KEY_EMPLOYEES_LOGIN, login)) {
             int id = findUser(login, password);
-            if (id >= 0){
+            if (id > 0){
                 Authorisation.isLoggedIn = true;
                 Authorisation.id = id;
                 setButtonsState();

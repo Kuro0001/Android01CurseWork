@@ -17,9 +17,9 @@ import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
 import com.example.cursework.R;
+import com.example.cursework.Validation;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentClientDetailBinding;
-import com.example.cursework.databinding.FragmentTourOperatorDetailBinding;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -203,10 +203,10 @@ public class ClientDetailFragment extends Fragment {
         binding.cbSexFemale.setChecked(false);
         if (sex) {
             binding.cbSexMale.setChecked(true);
-            sex = true;
+            this.sex = true;
         } else {
             binding.cbSexFemale.setChecked(true);
-            sex = false;
+            this.sex = false;
         }
     }
 
@@ -307,13 +307,34 @@ public class ClientDetailFragment extends Fragment {
     }
 
     /**
+     * Метод для проверки введеных данных пользователем
+     * @return
+     */
+    public boolean isCorrectInput(){
+        if(!Validation.isRightName(binding.etName.getText().toString())) return false;
+        if(!Validation.isRightName(binding.etPatronymic.getText().toString())) return false;
+        if(!Validation.isRightName(binding.etSurname.getText().toString())) return false;
+        if(!Validation.isRightPassport(binding.etPassport.getText().toString())) return false;
+        if(!Validation.isRightEmail(binding.etMail.getText().toString())) return false;
+        if(!Validation.isRightPhone(binding.etPhone.getText().toString())) return false;
+        if(!isSexCorrect()) return false;
+        return true;
+    }
+
+    /**
      * Метод добавления записи в БД
      * @param view
      */
     public void onAdd(View view) {
         Log.d(tagDB, "Вызов метода onAdd фрагмента ClientDetailFragment");
-        database = dbHelper.getWritableDatabase();
-        if (isSexCorrect()) {
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            database = dbHelper.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(DBHelper.KEY_CLIENTS_NAME, binding.etName.getText().toString());
             contentValues.put(DBHelper.KEY_CLIENTS_SURNAME, binding.etSurname.getText().toString());
@@ -339,11 +360,6 @@ public class ClientDetailFragment extends Fragment {
                 Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
                 toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
             }
-        }else{
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
-            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
         }
         toast.show();
     }
@@ -355,7 +371,13 @@ public class ClientDetailFragment extends Fragment {
     public void onEdit(View view) {
         Log.d(tagDB, "Вызов метода onEdit фрагмента ClientDetailFragment");
         database = dbHelper.getWritableDatabase();
-        if (isSexCorrect()) {
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
             if (rowIsExist(DBHelper.TABLE_NAME_CLIENTS, DBHelper.KEY_CLIENTS_ID, selectedID)) {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(DBHelper.KEY_CLIENTS_NAME, binding.etName.getText().toString());
@@ -389,11 +411,6 @@ public class ClientDetailFragment extends Fragment {
                 Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
                         + " - " + getResources().getString(R.string.db_row_cant_find));
             }
-        }else{
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
-            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
         }
         toast.show();
     }

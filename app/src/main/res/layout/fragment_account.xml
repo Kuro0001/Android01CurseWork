@@ -24,7 +24,8 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="@string/list_employee_column_login" />
+            android:text="@string/title_empty"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/tvPassword"
@@ -39,7 +40,8 @@
             android:ems="10"
             android:inputType="textVisiblePassword"
             android:minHeight="48dp"
-            android:text="@string/list_employee_column_password" />
+            android:text="@string/title_empty"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
             android:id="@+id/btnLogIn"

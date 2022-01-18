@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
 import com.example.cursework.R;
+import com.example.cursework.Validation;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentClientDetailBinding;
 import com.example.cursework.databinding.FragmentTourDetailBinding;
@@ -282,7 +283,7 @@ public class TourDetailFragment extends Fragment {
             int indDaysCount = cursor.getColumnIndex(DBHelper.KEY_TOURS_DAYS_COUNT);
             binding.etDaysCount.setText(String.valueOf(cursor.getInt(indDaysCount)));
             int indOffers = cursor.getColumnIndex(DBHelper.KEY_TOURS_OFFERS_ALL);
-            binding.etOffersCount.setText(String.valueOf(cursor.getFloat(indOffers)));
+            binding.etOffersCount.setText(String.valueOf(cursor.getInt(indOffers)));
             int indPrice = cursor.getColumnIndex(DBHelper.KEY_TOURS_PRICE);
             binding.etPrice.setText(String.valueOf(cursor.getFloat(indPrice)));
 
@@ -468,7 +469,17 @@ public class TourDetailFragment extends Fragment {
         host.navigate(R.id.fragment_hotel, bundle);
     }
 
-
+    /**
+     * Метод для проверки введеных данных пользователем
+     * @return
+     */
+    public boolean isCorrectInput(){
+        if(!Validation.isRightName(binding.etName.getText().toString())) return false;
+        if(!Validation.isInt(binding.etOffersCount.getText().toString())) return false;
+        if(!Validation.isFloat(binding.etPrice.getText().toString())) return false;
+        if(!Validation.isInt(binding.etDaysCount.getText().toString())) return false;
+        return true;
+    }
 
     /**
      * Метод добавления записи в БД
@@ -476,38 +487,14 @@ public class TourDetailFragment extends Fragment {
      */
     public void onAdd(View view) {
         Log.d(tagDB, "Вызов метода onAdd фрагмента TourDetailFragment");
-        database = dbHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_TOURS_NAME, binding.etName.getText().toString());
-        contentValues.put(DBHelper.KEY_TOURS_DAYS_COUNT, binding.etDaysCount.getText().toString());
-        contentValues.put(DBHelper.KEY_TOURS_PRICE, binding.etPrice.getText().toString());
-        contentValues.put(DBHelper.KEY_TOURS_OFFERS_ALL, binding.etOffersCount.getText().toString());
-        String date = years[year] + months[month] + days[day];
-        contentValues.put(DBHelper.KEY_TOURS_START_DATE, date);
-        contentValues.put(DBHelper.KEY_TOURS_ID_KIND, String.valueOf(selectedKindID));
-        contentValues.put(DBHelper.KEY_TOURS_ID_CATEGORY, String.valueOf(selectedCategoryID));
-        contentValues.put(DBHelper.KEY_TOURS_ID_TOUR_OPERATOR, String.valueOf(selectedTourOperatorID));
-        contentValues.put(DBHelper.KEY_TOURS_ID_HOTEL, String.valueOf(selectedHotelID));
-
-        long result = database.insert(DBHelper.TABLE_NAME_TOURS, null, contentValues);
-        if (result > 0) {
-            Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
-        } else {
-            Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
         }
-        toast.show();
-    }
-
-    /**
-     * Метод изменения выбранной записи данных в БД
-     * @param view
-     */
-    public void onEdit(View view) {
-        Log.d(tagDB, "Вызов метода onEdit фрагмента TourDetailFragment");
-        database = dbHelper.getWritableDatabase();
-        if (rowIsExist(DBHelper.TABLE_NAME_TOURS, DBHelper.KEY_TOURS_ID, selectedID)) {
+        else {
+            database = dbHelper.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(DBHelper.KEY_TOURS_NAME, binding.etName.getText().toString());
             contentValues.put(DBHelper.KEY_TOURS_DAYS_COUNT, binding.etDaysCount.getText().toString());
@@ -519,21 +506,61 @@ public class TourDetailFragment extends Fragment {
             contentValues.put(DBHelper.KEY_TOURS_ID_CATEGORY, String.valueOf(selectedCategoryID));
             contentValues.put(DBHelper.KEY_TOURS_ID_TOUR_OPERATOR, String.valueOf(selectedTourOperatorID));
             contentValues.put(DBHelper.KEY_TOURS_ID_HOTEL, String.valueOf(selectedHotelID));
-            String where = DBHelper.KEY_TOURS_ID + "=" + selectedID;
 
-            long result = database.update(DBHelper.TABLE_NAME_TOURS, contentValues, where, null);
+            long result = database.insert(DBHelper.TABLE_NAME_TOURS, null, contentValues);
             if (result > 0) {
                 Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
             } else {
                 Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
                 toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
             }
-        } else {
+        }
+        toast.show();
+    }
+
+    /**
+     * Метод изменения выбранной записи данных в БД
+     * @param view
+     */
+    public void onEdit(View view) {
+        Log.d(tagDB, "Вызов метода onEdit фрагмента TourDetailFragment");
+        database = dbHelper.getWritableDatabase();
+        if(!isCorrectInput()) {
             toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find), Toast.LENGTH_LONG);
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
             Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find));
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            if (rowIsExist(DBHelper.TABLE_NAME_TOURS, DBHelper.KEY_TOURS_ID, selectedID)) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DBHelper.KEY_TOURS_NAME, binding.etName.getText().toString());
+                contentValues.put(DBHelper.KEY_TOURS_DAYS_COUNT, binding.etDaysCount.getText().toString());
+                contentValues.put(DBHelper.KEY_TOURS_PRICE, binding.etPrice.getText().toString());
+                contentValues.put(DBHelper.KEY_TOURS_OFFERS_ALL, binding.etOffersCount.getText().toString());
+                String date = years[year] + months[month] + days[day];
+                contentValues.put(DBHelper.KEY_TOURS_START_DATE, date);
+                contentValues.put(DBHelper.KEY_TOURS_ID_KIND, String.valueOf(selectedKindID));
+                contentValues.put(DBHelper.KEY_TOURS_ID_CATEGORY, String.valueOf(selectedCategoryID));
+                contentValues.put(DBHelper.KEY_TOURS_ID_TOUR_OPERATOR, String.valueOf(selectedTourOperatorID));
+                contentValues.put(DBHelper.KEY_TOURS_ID_HOTEL, String.valueOf(selectedHotelID));
+                String where = DBHelper.KEY_TOURS_ID + "=" + selectedID;
+
+                long result = database.update(DBHelper.TABLE_NAME_TOURS, contentValues, where, null);
+                if (result > 0) {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);
+                } else {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+                }
+            } else {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find), Toast.LENGTH_LONG);
+                Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find));
+            }
         }
         toast.show();
     }

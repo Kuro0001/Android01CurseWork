@@ -83,6 +83,8 @@
     <string name="title_work_results_vouchers_count">Vouchers count</string>
     <string name="title_work_results_money_sum">Cash sum</string>
 
+    <string name="title_empty"></string>
+
     <string name="button_on_select_out_table_row">Select</string>
 
     <string name="button_add">Add new</string>
@@ -92,6 +94,7 @@
     <string name="button_log_in">Log in</string>
     <string name="button_logout">Log out</string>
     <string name="button_goto_account">Go to account</string>
+    <string name="button_on_result">Calculate work results</string>
 
     <string name="check_box_male">Male</string>
     <string name="check_box_female">Female</string>
@@ -120,6 +123,4 @@
     <string name="db_row_in_use">Row is referenced in another table</string>
 
     <string name="db_empty">Data base empty on this table</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

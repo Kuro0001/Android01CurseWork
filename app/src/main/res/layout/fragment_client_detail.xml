@@ -81,7 +81,8 @@
                     android:ems="10"
                     android:inputType="number"
                     android:minHeight="48dp"
-                    android:text="@string/list_client_column_passport" />
+                    android:text="@string/title_empty"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/tvSex"
@@ -170,7 +171,8 @@
                     android:ems="10"
                     android:inputType="phone"
                     android:minHeight="48dp"
-                    android:text="@string/list_client_column_phone" />
+                    android:text="@string/title_empty"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/tvMail"
@@ -185,7 +187,8 @@
                     android:ems="10"
                     android:inputType="textEmailAddress"
                     android:minHeight="48dp"
-                    android:text="@string/list_client_column_mail" />
+                    android:text="@string/title_empty"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

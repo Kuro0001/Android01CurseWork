@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
 import com.example.cursework.R;
+import com.example.cursework.Validation;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentHotelDetailBinding;
 import com.example.cursework.databinding.FragmentTourOperatorDetailBinding;
@@ -164,26 +165,45 @@ public class TourOperatorDetailFragment extends Fragment {
     }
 
     /**
+     * Метод для проверки введеных данных пользователем
+     * @return
+     */
+    public boolean isCorrectInput(){
+        if(!Validation.isRightName(binding.etName.getText().toString())) return false;
+        if(!Validation.isRightPhone(binding.etPhone.getText().toString())) return false;
+        if(!Validation.isRightCompanyNumber(binding.etUniqueNumber.getText().toString())) return false;
+        if(!Validation.isRightEmail(binding.etMail.getText().toString())) return false;
+        return true;
+    }
+
+    /**
      * Метод добавления записи в БД
      * @param view
      */
     public void onAdd(View view) {
         Log.d(tagDB, "Вызов метода onAdd фрагмента TourOperatorDetailFragment");
         database = dbHelper.getWritableDatabase();
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_NAME, binding.etName.getText().toString());
+            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_PHONE, binding.etPhone.getText().toString());
+            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_UNIQUE_COMPANY_NUMBER, binding.etUniqueNumber.getText().toString());
+            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_MAIL, binding.etMail.getText().toString());
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_TOUR_OPERATORS_NAME, binding.etName.getText().toString());
-        contentValues.put(DBHelper.KEY_TOUR_OPERATORS_PHONE, binding.etPhone.getText().toString());
-        contentValues.put(DBHelper.KEY_TOUR_OPERATORS_UNIQUE_COMPANY_NUMBER, binding.etUniqueNumber.getText().toString());
-        contentValues.put(DBHelper.KEY_TOUR_OPERATORS_MAIL, binding.etMail.getText().toString());
-
-        long result = database.insert(DBHelper.TABLE_NAME_TOUR_OPERATORS, null, contentValues);
-        if (result > 0) {
-            Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
-        } else {
-            Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+            long result = database.insert(DBHelper.TABLE_NAME_TOUR_OPERATORS, null, contentValues);
+            if (result > 0) {
+                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
+            } else {
+                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+            }
         }
         toast.show();
     }
@@ -195,27 +215,35 @@ public class TourOperatorDetailFragment extends Fragment {
     public void onEdit(View view){
         Log.d(tagDB, "Вызов метода onEdit фрагмента TourOperatorDetailFragment");
         database = dbHelper.getWritableDatabase();
-        if (rowIsExist(DBHelper.TABLE_NAME_TOUR_OPERATORS, DBHelper.KEY_TOUR_OPERATORS_ID, selectedTourOperatorID)) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_NAME, binding.etName.getText().toString());
-            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_PHONE, binding.etPhone.getText().toString());
-            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_UNIQUE_COMPANY_NUMBER, binding.etUniqueNumber.getText().toString());
-            contentValues.put(DBHelper.KEY_TOUR_OPERATORS_MAIL, binding.etMail.getText().toString());
-            String where = DBHelper.KEY_TOUR_OPERATORS_ID + "=" + selectedTourOperatorID;
-
-            long result = database.update(DBHelper.TABLE_NAME_TOUR_OPERATORS, contentValues, where, null);
-            if (result > 0) {
-                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK),Toast.LENGTH_LONG);
-            }else {
-                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR),Toast.LENGTH_LONG);
-            }
-        }else {
+        if(!isCorrectInput()) {
             toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find),Toast.LENGTH_LONG);
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
             Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find));
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            if (rowIsExist(DBHelper.TABLE_NAME_TOUR_OPERATORS, DBHelper.KEY_TOUR_OPERATORS_ID, selectedTourOperatorID)) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DBHelper.KEY_TOUR_OPERATORS_NAME, binding.etName.getText().toString());
+                contentValues.put(DBHelper.KEY_TOUR_OPERATORS_PHONE, binding.etPhone.getText().toString());
+                contentValues.put(DBHelper.KEY_TOUR_OPERATORS_UNIQUE_COMPANY_NUMBER, binding.etUniqueNumber.getText().toString());
+                contentValues.put(DBHelper.KEY_TOUR_OPERATORS_MAIL, binding.etMail.getText().toString());
+                String where = DBHelper.KEY_TOUR_OPERATORS_ID + "=" + selectedTourOperatorID;
+
+                long result = database.update(DBHelper.TABLE_NAME_TOUR_OPERATORS, contentValues, where, null);
+                if (result > 0) {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);
+                } else {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+                }
+            } else {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find), Toast.LENGTH_LONG);
+                Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find));
+            }
         }
         toast.show();
     }

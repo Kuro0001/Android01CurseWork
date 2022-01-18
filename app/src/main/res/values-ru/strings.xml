@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CurseWork</string>
+
+    <string name="title_home">Домой</string>
+    <string name="title_home_header_list">Таблицы</string>
+    <string name="fragment_home_header_list">Таблицы</string>
+    <string name="fragment_home_button_directions">Направления</string>
+    <string name="fragment_home_button_hotels">Отели</string>
+    <string name="fragment_home_button_kinds">Виды</string>
+    <string name="fragment_home_button_categories">Категории</string>
+    <string name="fragment_home_button_tour_operators">Туроператоры</string>
+    <string name="fragment_home_button_clients">Клиенты</string>
+    <string name="fragment_home_button_employees">Сотрудники</string>
+    <string name="fragment_home_button_tours">Туры</string>
+    <string name="fragment_home_button_vouchers">Путевки</string>
+
+    <string name="title_new_voucher">Новая путевка</string>
+    <string name="title_account">Аккаунт</string>
+
+
+    <string name="title_direction">Направление</string>
+    <string name="list_direction_column_name">Наименование: </string>
+
+
+    <string name="title_hotel">Hotel</string>
+    <string name="list_hotel_column_name">Наименование: </string>
+    <string name="list_hotel_column_address">Аддрес: </string>
+    <string name="list_hotel_column_direction">Направление: </string>
+
+    <string name="title_kind">Вид</string>
+    <string name="list_kind_column_name">Наименование: </string>
+
+    <string name="title_category">Category</string>
+    <string name="list_category_column_name">Наименование: </string>
+    <string name="list_category_column_added_value">Добавочная стоимость: </string>
+    <string name="list_category_column_discount">Свидка: </string>
+
+    <string name="title_tour_operator">Туроператор</string>
+    <string name="list_tour_operator_column_name">Наименование: </string>
+    <string name="list_tour_operator_column_phone">Т. номер: </string>
+    <string name="list_tour_operator_column_unique_number">Ун. номер: </string>
+    <string name="list_tour_operator_column_mail">Почта: </string>
+
+    <string name="title_employee">Сотрудник</string>
+    <string name="list_employee_column_name">Имя: </string>w
+    <string name="list_employee_column_surname">Фамилия: </string>
+    <string name="list_employee_column_patronymic">Отчество: </string>
+    <string name="list_employee_column_mail">Почта: </string>
+    <string name="list_employee_column_login">Логин: </string>
+    <string name="list_employee_column_password">Пароль: </string>
+
+    <string name="title_client">Client</string>
+    <string name="list_client_column_name">Имя: </string>w
+    <string name="list_client_column_surname">Фамилия: </string>
+    <string name="list_client_column_patronymic">Отчество: </string>
+    <string name="list_client_column_mail">Почта: </string>
+    <string name="list_client_column_phone">Н. телефона: </string>
+    <string name="list_client_column_passport">Пасспорт: </string>
+    <string name="list_client_column_sex">Пол: </string>
+    <string name="list_client_column_birthdate">Дата рождения: </string>
+
+    <string name="title_tour">Тур</string>
+    <string name="list_tour_column_name">Наименование: </string>
+    <string name="list_tour_column_date_start">Дата начала: </string>
+    <string name="list_tour_column_days_count">Кол-во дней: </string>
+    <string name="list_tour_column_offers_all">Кол-во предложений: </string>
+    <string name="list_tour_column_price">Цена: </string>
+    <string name="list_tour_column_tour_operator">Туроператор: </string>
+    <string name="list_tour_column_kind">Вид: </string>
+    <string name="list_tour_column_category">Категория: </string>
+    <string name="list_tour_column_hotel">Отель: </string>
+    <string name="list_tour_column_direction">Направление: </string>
+    <string name="list_tour_column_vouchers_done">Путевки: </string>
+
+    <string name="title_voucher">Путевка</string>
+    <string name="list_voucher_column_name">Наименование: </string>
+    <string name="list_voucher_column_date">Дата оформления: </string>
+    <string name="list_voucher_column_price">Цена: </string>
+
+    <string name="title_work_results">Результаты работы</string>
+    <string name="title_work_results_date_start">Посчитать с</string>
+    <string name="title_work_results_date_end">Посчитать до</string>
+    <string name="title_work_results_vouchers_count">Кол-во путевок</string>
+    <string name="title_work_results_money_sum">Денег на сумму</string>
+
+    <string name="title_empty"></string>
+
+    <string name="button_on_select_out_table_row">Выбрать</string>
+
+    <string name="button_add">Добавить</string>
+    <string name="button_edit">Редактировать</string>
+    <string name="button_delete">Удалить</string>
+    <string name="button_search">Поиск</string>
+    <string name="button_log_in">Войти</string>
+    <string name="button_logout">Выйти</string>
+    <string name="button_goto_account">Пройти к аккаунту</string>
+    <string name="button_on_result">Посчитать результаты работы</string>
+
+    <string name="check_box_male">Мужчина</string>
+    <string name="check_box_female">Женщина</string>
+
+    <string name="action_result_OK">Действие успешно выполнено</string>
+    <string name="action_result_input_not_correct">Некорректные входные данные</string>
+    <string name="action_add_result_OK">Запись успешно добавлена</string>
+    <string name="action_edit_result_OK">Запись успешно изменена</string>
+    <string name="action_delete_result_OK">Запись успешно удалена</string>
+
+    <string name="action_result_NOT_OK">Действие обработано, но не выполнено</string>
+
+    <string name="action_search_OK">Найдено %1$d записей</string>
+    <string name="action_search_null">Нет записей удовлетворяющих условиям поиска</string>
+    <string name="action_result_ERROR">Действие не может быть выполнено</string>
+    <string name="action_search_tour_full_vouchers">Выбранный тур не имеет доступных предложений</string>
+
+    <string name="action_authorisation_login_not_exist">Логин не найден</string>
+    <string name="action_authorisation_wrong_password">Неверный пароль</string>
+    <string name="action_authorisation_log_in_OK">Вход в уч. запись выполнена</string>
+    <string name="action_authorisation_log_out_OK">Выход из уч. запись выполнен</string>
+
+    <string name="db_row_dont_exist">Записи не сущетсует в базе данных</string>
+    <string name="db_row_cant_find">Не получилось найти запись в базе данныъ</string>
+    <string name="db_row_already_exist">Запись уже есть в базе данных</string>
+    <string name="db_row_in_use">На запись ссылаются в другой таблице</string>
+
+    <string name="db_empty">Таблица в базе данных пуста</string>
+</resources>

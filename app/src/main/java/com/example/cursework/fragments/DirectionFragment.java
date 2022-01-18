@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
 import com.example.cursework.R;
+import com.example.cursework.Validation;
 import com.example.cursework.dataBase.DBDirections;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentDirectionBinding;
@@ -105,7 +106,7 @@ public class DirectionFragment extends Fragment {
                 directionId = (int)l;
                 if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
                     Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
-                    binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                    binding.etEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
                 }
             }
         });
@@ -154,16 +155,14 @@ public class DirectionFragment extends Fragment {
                 null);
         simpleCursorAdapter = new SimpleCursorAdapter(getContext(), R.layout.item_direction , cursor, from, to, 0);
         binding.lvDirections.setAdapter(simpleCursorAdapter);
-//        binding.lvDirections.setOnItemClickListener(this::onClickList);
 
         binding.lvDirections.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 directionId = (int)l;
                 if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
-//            binding.edEnterName.setText(String.valueOf(directionId));
                     Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
-                    binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                    binding.etEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
                     setEnabled(true);
                 }else {
                     setEnabled(false);
@@ -183,7 +182,7 @@ public class DirectionFragment extends Fragment {
                         if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
 //            binding.edEnterName.setText(String.valueOf(directionId));
                             Cursor item = (Cursor) simpleCursorAdapter.getItem(i);
-                            binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
+                            binding.etEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
                             setEnabled(true);
                         }else {
                             setEnabled(false);
@@ -205,12 +204,9 @@ public class DirectionFragment extends Fragment {
     public void onClickList(AdapterView<?> parent, View view, int position, long id){
         directionId = (int)id;
         if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
-//            binding.edEnterName.setText(String.valueOf(directionId));
             Cursor item = (Cursor) simpleCursorAdapter.getItem(position);
-            binding.edEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
-            setEnabled(true);
+            binding.etEnterName.setText(item.getString(item.getColumnIndexOrThrow(from[0])));
         }else {
-            setEnabled(false);
         }
     }
 
@@ -237,27 +233,43 @@ public class DirectionFragment extends Fragment {
     }
 
     /**
+     * Метод для проверки введеных данных пользователем
+     * @return
+     */
+    public boolean isCorrectInput(){
+        String s = binding.etEnterName.getText().toString();
+        if(!Validation.isRightName(binding.etEnterName.getText().toString())) return false;
+        return true;
+    }
+
+    /**
      * Метод добавления записи в БД
      * @param view
      */
     public void onAdd(View view){
         Log.d(tagDB, "Вызов метода onAdd фрагмента DirectionFragment");
         database = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_DIRECTIONS_NAME, binding.edEnterName.getText().toString());
-
-        long result = database.insert(DBHelper.TABLE_NAME_DIRECTIONS, null, contentValues);
-
-        if (result > 0){
-            Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK),Toast.LENGTH_LONG);
-            readDB();
-        }else{
-            Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR),Toast.LENGTH_LONG);
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
         }
+        else {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DBHelper.KEY_DIRECTIONS_NAME, binding.etEnterName.getText().toString());
 
+            long result = database.insert(DBHelper.TABLE_NAME_DIRECTIONS, null, contentValues);
+
+            if (result > 0) {
+                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
+                readDB();
+            } else {
+                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+            }
+        }
         toast.show();
     }
 
@@ -267,26 +279,34 @@ public class DirectionFragment extends Fragment {
      */
     public void onEdit(View view){
         Log.d(tagDB, "Вызов метода onEdit фрагмента DirectionFragment");
-        database = dbHelper.getWritableDatabase();
-        if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS,DBHelper.KEY_DIRECTIONS_ID,directionId)) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DBHelper.KEY_DIRECTIONS_NAME, binding.edEnterName.getText().toString());
-            String where = DBHelper.KEY_DIRECTIONS_ID + "=" + directionId;
-
-            long result = database.update(DBHelper.TABLE_NAME_DIRECTIONS, contentValues, where, null);
-            if (result > 0) {
-                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK),Toast.LENGTH_LONG);
-                readDB();
-            }else {
-                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR),Toast.LENGTH_LONG);
-            }
-        }else {
+        if(!isCorrectInput()) {
             toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find),Toast.LENGTH_LONG);
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
             Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find));
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            database = dbHelper.getWritableDatabase();
+            if (rowIsExist(DBHelper.TABLE_NAME_DIRECTIONS, DBHelper.KEY_DIRECTIONS_ID, directionId)) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DBHelper.KEY_DIRECTIONS_NAME, binding.etEnterName.getText().toString());
+                String where = DBHelper.KEY_DIRECTIONS_ID + "=" + directionId;
+
+                long result = database.update(DBHelper.TABLE_NAME_DIRECTIONS, contentValues, where, null);
+                if (result > 0) {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);
+                    readDB();
+                } else {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+                }
+            } else {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find), Toast.LENGTH_LONG);
+                Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find));
+            }
         }
         toast.show();
     }

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.cursework.Authorisation;
 import com.example.cursework.R;
+import com.example.cursework.Validation;
 import com.example.cursework.dataBase.DBHelper;
 import com.example.cursework.databinding.FragmentKindsBinding;
 
@@ -195,26 +196,44 @@ public class KindsFragment extends Fragment {
             return true;
         return false;
     }
+
+    /**
+     * Метод для проверки введеных данных пользователем
+     * @return
+     */
+    public boolean isCorrectInput(){
+        if(!Validation.isRightName(binding.etName.getText().toString())) return false;
+        return true;
+    }
+
     /**
      * Метод добавления записи в БД
      * @param view
      */
     public void onAdd(View view){
         Log.d(tagDB, "Вызов метода onAdd фрагмента KindsFragment");
-        database = dbHelper.getWritableDatabase();
+        if(!isCorrectInput()) {
+            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
+            Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            database = dbHelper.getWritableDatabase();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.KEY_KINDS_NAME, binding.etName.getText().toString());
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DBHelper.KEY_KINDS_NAME, binding.etName.getText().toString());
 
-        long result = database.insert(DBHelper.TABLE_NAME_KINDS, null, contentValues);
+            long result = database.insert(DBHelper.TABLE_NAME_KINDS, null, contentValues);
 
-        if (result > 0){
-            Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK),Toast.LENGTH_LONG);
-            readDB();
-        }else{
-            Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-            toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR),Toast.LENGTH_LONG);
+            if (result > 0) {
+                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_add_result_OK), Toast.LENGTH_LONG);
+                readDB();
+            } else {
+                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+            }
         }
         toast.show();
     }
@@ -224,26 +243,34 @@ public class KindsFragment extends Fragment {
      */
     public void onEdit(View view){
         Log.d(tagDB, "Вызов метода onEdit фрагмента KindsFragment");
-        database = dbHelper.getWritableDatabase();
-        if (rowIsExist(DBHelper.TABLE_NAME_KINDS,DBHelper.KEY_KINDS_ID,kindId)) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DBHelper.KEY_KINDS_NAME, binding.etName.getText().toString());
-            String where = DBHelper.KEY_KINDS_ID + "=" + kindId;
-
-            long result = database.update(DBHelper.TABLE_NAME_KINDS, contentValues, where, null);
-            if (result > 0) {
-                Log.d(tagDB, getResources().getString(R.string.action_result_OK));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK),Toast.LENGTH_LONG);
-                readDB();
-            }else {
-                Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
-                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR),Toast.LENGTH_LONG);
-            }
-        }else {
+        if(!isCorrectInput()) {
             toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find),Toast.LENGTH_LONG);
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct), Toast.LENGTH_LONG);
             Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
-                    + " - " + getResources().getString(R.string.db_row_cant_find));
+                    + " - " + getResources().getString(R.string.action_result_input_not_correct));
+        }
+        else {
+            database = dbHelper.getWritableDatabase();
+            if (rowIsExist(DBHelper.TABLE_NAME_KINDS, DBHelper.KEY_KINDS_ID, kindId)) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DBHelper.KEY_KINDS_NAME, binding.etName.getText().toString());
+                String where = DBHelper.KEY_KINDS_ID + "=" + kindId;
+
+                long result = database.update(DBHelper.TABLE_NAME_KINDS, contentValues, where, null);
+                if (result > 0) {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_OK));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_edit_result_OK), Toast.LENGTH_LONG);
+                    readDB();
+                } else {
+                    Log.d(tagDB, getResources().getString(R.string.action_result_ERROR));
+                    toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_ERROR), Toast.LENGTH_LONG);
+                }
+            } else {
+                toast = Toast.makeText(getContext(), getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find), Toast.LENGTH_LONG);
+                Log.d(tagDB, getResources().getString(R.string.action_result_NOT_OK)
+                        + " - " + getResources().getString(R.string.db_row_cant_find));
+            }
         }
         toast.show();
     }

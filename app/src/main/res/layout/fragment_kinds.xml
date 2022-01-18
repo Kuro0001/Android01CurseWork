@@ -27,7 +27,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="@string/list_kind_column_name" />
+                android:minHeight="48dp"
+                android:text="@string/title_empty"
+                tools:ignore="SpeakableTextPresentCheck" />
         </LinearLayout>
 
         <LinearLayout
