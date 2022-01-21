@@ -39,7 +39,7 @@ import com.example.cursework.databinding.FragmentKindsBinding;
         private String mParam1;
         private String mParam2;
 
-        Toast toast;
+        public Toast toast;
         public static final String tagDB = "tagFragment";
         private FragmentKindsBinding binding;
         DBHelper dbHelper;
